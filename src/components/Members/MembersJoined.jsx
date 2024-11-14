@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   CartesianGrid,
   Line,
@@ -8,26 +8,48 @@ import {
   YAxis,
   Tooltip,
 } from "recharts";
+import Heading from "../Headings/Headings";
+import Spinner from "../loaders/Spinner";
+import FilterSelect from "../Filter/Select";
+import { useMemberChart } from "../../hooks/useDashboard";
 
 export default function MembersJoined() {
+  const [timePeriod, setTimePeriod] = useState("Week");
+  const { data, isLoading, error } = useMemberChart(timePeriod);
+
+  const handleChange = (period) => {
+    setTimePeriod(period);
+  };
+
+  let dataKey, yDomain, chartTitle;
+  if (timePeriod === "Week") {
+    dataKey = "day";
+    yDomain = [0, 50];
+    chartTitle = "Weekly Members Joined";
+  } else if (timePeriod === "Month") {
+    dataKey = "week";
+    yDomain = [0, 1000];
+    chartTitle = "Monthly Members Joined";
+  } else {
+    dataKey = "month";
+    yDomain = [0, 1500];
+    chartTitle = "Yearly Members Joined";
+  }
+
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md w-full lg:w-3/4 mr-6">
+    <div className="bg-white p-6 rounded-lg shadow-md w-full   ">
       <div className="flex justify-between items-center">
-        <h2 className="text-xl font-semibold text-blue-600">{chartTitle}</h2>
-        <select
-          className="p-2 border rounded"
+        <Heading text={chartTitle} />
+        <FilterSelect
+          options={["Week", "Yearly"]}
+          selectedValue={timePeriod}
           onChange={handleChange}
-          value={timePeriod}
-        >
-          <option value="Week">Week</option>
-          {/* <option value="Month">Month</option> */}
-          <option value="Yearly">Yearly</option>
-        </select>
+        />
       </div>
       <div className="mt-6 h-64">
-        {loading ? (
+        {isLoading ? (
           <div>
-            <Spinners />
+            <Spinner size="10" borderSize="3" />
           </div>
         ) : error ? (
           <div>{error}</div>

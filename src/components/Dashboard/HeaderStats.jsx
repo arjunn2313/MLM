@@ -9,7 +9,7 @@ const HeaderStats = ({ stat, color, icon, count, isLoading }) => {
   return (
     <div className={`bg-white p-6 rounded-lg shadow-md border ${color} `}>
       {isLoading ? (
-        <Spinner />
+        <Spinner size="10" borderSize="3"/>
       ) : (
         <div className="flex  justify-between">
           <span>

@@ -7,7 +7,7 @@ const FilterSelect = ({ type, options, selectedValue, onChange }) => {
     >
       {options.map((option, index) => (
         <option key={index} value={option}>
-          {type} : {option}
+          {type}  {option}
         </option>
       ))}
     </select>

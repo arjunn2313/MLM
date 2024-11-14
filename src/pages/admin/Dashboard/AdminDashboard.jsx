@@ -3,10 +3,10 @@ import MembersJoined from "../../../components/Members/MembersJoined";
 import DistrictHeads from "../../../components/DistrictHeads/DistrictHead";
 import MembersTable from "../../../components/Members/MembersTable";
 import { useDashCount } from "../../../hooks/useDashboard";
-import Member from "../../../assets/members.png"
-import TotalTree from "../../../assets/total tree.png"
-import District from "../../../assets/dashDistrict.png"
-import Dashtree from "../../../assets/DashTree.png"
+import Member from "../../../assets/members.png";
+import TotalTree from "../../../assets/total tree.png";
+import District from "../../../assets/dashDistrict.png";
+import Dashtree from "../../../assets/DashTree.png";
 
 export default function AdminDashboard() {
   const { data, isLoading, error } = useDashCount();
@@ -26,7 +26,7 @@ export default function AdminDashboard() {
 
   return (
     <>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 ">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6  ">
         <HeaderStats
           isLoading={isLoading}
           color="border-orange-500"
@@ -55,12 +55,16 @@ export default function AdminDashboard() {
           count={count.incomplete}
           icon={Dashtree}
         />
-        <div className="flex flex-col lg:flex-row mt-6">
+      </div>
+      <div className="grid grid-cols-8 gap-3    mt-5">
+        <div className="col-span-6">
           <MembersJoined />
+        </div>
+        <div className="col-span-2">
           <DistrictHeads />
         </div>
-        <MembersTable />
       </div>
+      <MembersTable />
     </>
   );
 }
