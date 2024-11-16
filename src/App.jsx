@@ -6,12 +6,14 @@ import RegisterTable from "./pages/admin/Register/RegisterTable";
 import RegisterForm from "./pages/admin/Register/RegisterForm";
 import RegistrationCondition from "./pages/admin/Register/RegistrationCondition";
 import Preview from "./pages/admin/Register/Preview";
+import ScrollToTop from "./utils/scrollToTop";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: (
       <Layout>
+         
         <Outlet />
       </Layout>
     ),

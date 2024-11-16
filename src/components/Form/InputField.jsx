@@ -34,7 +34,7 @@ const InputField = ({
         Checking for sponsor details...
       </span>
     )}
-    {error && <p className="text-red-500 text-sm mt-1">{error.message}</p>}{" "}
+    
     {!isLoading && error && (
       <span className="text-red-500 text-sm mt-1">{error.message}</span>
     )}

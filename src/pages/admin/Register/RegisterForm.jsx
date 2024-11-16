@@ -12,8 +12,8 @@ import {
   useCheckPlacement,
   useCheckSponsor,
 } from "../../../hooks/useMember";
-import { fileToBase64 } from "../../../utils/fileUtils";
 import { useNavigate } from "react-router-dom";
+import { fileToBase64 } from "../../../utils/fileUtils";
 
 export default function RegisterForm() {
   const {
@@ -24,8 +24,8 @@ export default function RegisterForm() {
     watch,
     reset,
   } = useForm();
+
   const navigate = useNavigate();
-  const parentInfo = watch("parentInfo", { relation: "S/O", name: "" });
   const phoneNumber = watch("phoneNumber");
   const sponsorId = watch("sponsorId");
   const placementId = watch("placementId");
@@ -74,6 +74,7 @@ export default function RegisterForm() {
     localStorage.setItem("formData", JSON.stringify(plainObject));
     navigate("terms-and-condition");
   };
+
   return (
     <div className="container bg-white mx-auto p-4">
       <Heading text="Registration Form" color="default" />
@@ -93,22 +94,16 @@ export default function RegisterForm() {
             })}
             error={errors.name}
           />
-
           <SelectGroup
             label="Parent Information"
             placeholder="Enter parent name"
             options={["S/O", "D/O", "W/O"]}
-            value={parentInfo}
-            onChange={(value) => setValue("parentInfo", value)}
-            error={errors.parentInfo}
-            register={register("parentInfo", {
-              validate: (value) => {
-                if (!value?.relation) return "Relation is required";
-                if (!value?.name || value.name.length < 3)
-                  return "Parent name should be at least 3 characters";
-                return true;
-              },
-            })}
+            selectName="parentInfo.relation"
+            inputName="parentInfo.name"
+            register={register}
+            watch={watch}
+            setValue={setValue}
+            error={errors.parentInfo?.name}
           />
 
           <PhoneNumber

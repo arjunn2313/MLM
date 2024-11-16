@@ -1,52 +1,52 @@
 import React from "react";
 
-export default function SelectGroup({
+const SelectGroup = ({
   label,
-  placeholder,
-  value = {}, // default empty object
-  onChange,
+  name,
+  options = [],
+  placeholder = "",
+  register,
   error,
-  options,
-}) {
-  const [selectValue, setSelectValue] = React.useState(value.relation || options[0]);
-  const [inputValue, setInputValue] = React.useState(value.name || "");
-
-  const handleSelectChange = (e) => {
-    const newRelation = e.target.value;
-    setSelectValue(newRelation);
-    onChange({ relation: newRelation, name: inputValue });
-  };
-
-  const handleInputChange = (e) => {
-    const newName = e.target.value;
-    setInputValue(newName);
-    onChange({ relation: selectValue, name: newName });
-  };
+  selectName,
+  inputName,
+  watch,
+  setValue,
+}) => {
+  const selectValue = watch(selectName);
+  const inputValue = watch(inputName);
 
   return (
     <div>
       <label className="block text-sm font-medium text-gray-700">{label}</label>
-      <div className="flex items-center border mt-1 rounded-md overflow-hidden">
+      <div
+        className={`flex items-center border mt-1 rounded-md overflow-hidden ${
+          error ? "border-red-600" : "border-gray-600"
+        }`}
+      >
         <select
+          {...register(selectName, { required: "Relation is required" })}
           className="h-full bg-gray-100 px-4 py-2 focus:outline-none border-none"
-          value={selectValue}
-          onChange={handleSelectChange}
+          value={selectValue || options[0]}
+          onChange={(e) => setValue(selectName, e.target.value)}
         >
-          {options?.map((option, index) => (
+          {options.map((option, index) => (
             <option key={index} value={option}>
               {option}
             </option>
           ))}
         </select>
         <input
+          {...register(inputName, { required: "Parent name is required" })}
           type="text"
           className="flex-1 px-4 py-2 border-none focus:outline-none"
           placeholder={placeholder}
-          value={inputValue}
-          onChange={handleInputChange}
+          value={inputValue || ""}
+          onChange={(e) => setValue(inputName, e.target.value)}
         />
       </div>
-      {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
+      {error && <p className="text-red-500 text-sm mt-1">{error.message}</p>}
     </div>
   );
-}
+};
+
+export default SelectGroup;
