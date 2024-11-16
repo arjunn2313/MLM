@@ -1,5 +1,6 @@
 import React from "react";
 import Spinner from "../loaders/Spinner";
+import LoadingBox from "../Loaders/LoadingBox";
 
 const HeaderStats = ({ stat, color, icon, count, isLoading }) => {
   const formatCount = (count) => {
@@ -9,7 +10,7 @@ const HeaderStats = ({ stat, color, icon, count, isLoading }) => {
   return (
     <div className={`bg-white p-6 rounded-lg shadow-md border ${color} `}>
       {isLoading ? (
-        <Spinner size="10" borderSize="3"/>
+        <LoadingBox width="w-full" height="h-24" rounded="rounded-md" />
       ) : (
         <div className="flex  justify-between">
           <span>

@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import Spinner from "../loaders/Spinner";
 import { useNavigate } from "react-router-dom";
 import Heading from "../Headings/Headings";
 import { useDistrictHead } from "../../hooks/useDashboard";
 import { MdAdd } from "react-icons/md";
+import LoadingBox from "../Loaders/LoadingBox";
 
 export default function DistrictHead() {
   const navigate = useNavigate();
@@ -12,7 +12,7 @@ export default function DistrictHead() {
     <div className="bg-white p-6 rounded-lg shadow-md w-full h-full">
       <Heading text=" District Heads" />
       {isLoading ? (
-        <Spinner size="10" borderSize="3" />
+        <LoadingBox width="w-full" height="h-64" rounded="rounded-md" />
       ) : (
         <>
           {data?.map((head, index) => (

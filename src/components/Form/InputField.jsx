@@ -6,11 +6,14 @@ const InputField = ({
   register,
   options = [],
   error,
+  isError,
+  isLoading,
+  disabled = false,
 }) => (
   <div>
     <label className="block text-sm font-medium text-gray-700">{label}</label>
     {type === "select" ? (
-      <select className="mt-1 block w-full p-2 border" {...register}>
+      <select className="mt-1 block w-full p-2 border rounded-md" {...register}>
         {options.map((option) => (
           <option key={option} value={option}>
             {option}
@@ -19,13 +22,27 @@ const InputField = ({
       </select>
     ) : (
       <input
+        disabled={disabled}
         type={type}
         placeholder={placeholder}
-        className="mt-1 block w-full p-2 border"
+        className="mt-1 block w-full p-2 border rounded-md"
         {...register}
       />
     )}
-    {error && <p className="text-red-500 text-sm mt-1">{error.message}</p>}
+    {isLoading && (
+      <span className="text-gray-500 text-sm mt-1">
+        Checking for sponsor details...
+      </span>
+    )}
+    {error && <p className="text-red-500 text-sm mt-1">{error.message}</p>}{" "}
+    {!isLoading && error && (
+      <span className="text-red-500 text-sm mt-1">{error.message}</span>
+    )}
+    {!isLoading && isError && !error && (
+      <span className="text-red-500 text-sm mt-1">
+        {isError?.response?.data?.error}
+      </span>
+    )}
   </div>
 );
 

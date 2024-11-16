@@ -9,9 +9,9 @@ import {
   Tooltip,
 } from "recharts";
 import Heading from "../Headings/Headings";
-import Spinner from "../loaders/Spinner";
 import FilterSelect from "../Filter/Select";
 import { useMemberChart } from "../../hooks/useDashboard";
+import LoadingBox from "../Loaders/LoadingBox";
 
 export default function MembersJoined() {
   const [timePeriod, setTimePeriod] = useState("Week");
@@ -49,7 +49,7 @@ export default function MembersJoined() {
       <div className="mt-6 h-64">
         {isLoading ? (
           <div>
-            <Spinner size="10" borderSize="3" />
+            <LoadingBox width="w-full" height="h-64" rounded="rounded-md" />
           </div>
         ) : error ? (
           <div>{error}</div>

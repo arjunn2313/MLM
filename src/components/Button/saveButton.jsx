@@ -1,12 +1,13 @@
 import { useState } from "react";
 
-function SaveButton({ onClick, loading, text, loadingText }) {
+function SaveButton({ type = "button", onClick, loading, text, loadingText }) {
   return (
     <button
-      type="submit"
+      type={type}
       className={`bg-primary text-white px-10 py-2 rounded-md flex items-center justify-center transition-transform duration-200 ${
         loading ? "scale-95 cursor-not-allowed" : "hover:scale-105"
       }`}
+      onClick={onClick}
       disabled={loading}
     >
       {loading ? (

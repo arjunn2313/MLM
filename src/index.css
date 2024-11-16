@@ -1,5 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
-
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap");
 
 * {
   padding: 0;
@@ -9,10 +8,14 @@
 
 body {
   background-color: #e3f0fba3;
-  font-family: 'Roboto', sans-serif;
-  color: #505050
+  font-family: "Roboto", sans-serif;
+  color: #505050;
 }
 
+.PhoneInput input {
+  border: 0;
+  outline: none;
+}
 
 @tailwind base;
 @tailwind components;
