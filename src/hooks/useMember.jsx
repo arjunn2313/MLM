@@ -6,6 +6,7 @@ import {
   fetchMember,
   fetchMembers,
   postMemberData,
+  updateMemberDetails,
   updateMemberStatus,
 } from "../api/memberApi";
 import toast from "react-hot-toast";
@@ -41,6 +42,20 @@ export const useMemberDetails = (memberId) => {
     queryKey: ["member-details", memberId],
     queryFn: () => fetchMember({ memberId }),
     refetchOnWindowFocus: false,
+  });
+};
+
+
+//PUT --- HOOK FOR UPDATING AGENT DETAILS
+export const useUpdateMemberDetails = () => {
+  return useMutation({
+    mutationFn: updateMemberDetails,
+    onSuccess: (data) => {
+      toast.success("Member details successfully updated!");
+    },
+    onError: (error) => {
+      toast.error(error?.response?.data?.message || "Something went wrong!");
+    },
   });
 };
 

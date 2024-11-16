@@ -20,6 +20,12 @@ export const fetchMember = async ({ memberId }) => {
   return response.data;
 };
 
+// UPDATE AGENT DETAILS 
+export const updateMemberDetails = async ({formData, memberId}) => {
+  const response = await api.put(`/api/admin/agent/agent-update/${memberId}`, formData);
+  return response.data;
+};
+
 // UPDATE AGENT STATUS 
 export const updateMemberStatus = async ({data, memberId}) => {
   const response = await api.put(`/api/admin/agent/update-status/${memberId}`, data);
