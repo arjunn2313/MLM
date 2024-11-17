@@ -51,3 +51,10 @@ export const checkPlacement = async (placementId) => {
   const response = await api.get(`/api/admin/agent/placement-member/${placementId}`);
   return response.data;  
 };
+
+
+// API function to fetch dashboard 
+export const fetchMemberDashboard = async (memberId) => {
+  const response = await api.get(`/api/admin/agent/downline/${memberId}`);
+  return response.data;  
+};

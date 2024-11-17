@@ -1,6 +1,7 @@
 import React from "react";
 import { useSearchParams } from "react-router-dom";
 import MemberList from "./MemberList";
+import MemberDashboard from "./MemberDashboard";
 
 export default function MemberLayout() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -10,9 +11,8 @@ export default function MemberLayout() {
     switch (memberView) {
       case "table":
         return <MemberList />;
-
-      // case "dash":
-      //   return <MemberDash />;
+      case "dash":
+        return <MemberDashboard />;
 
       // case "history":
       //   return <ExpenseHis />;

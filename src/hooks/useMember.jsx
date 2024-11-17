@@ -4,6 +4,7 @@ import {
   checkPlacement,
   checkSponsor,
   fetchMember,
+  fetchMemberDashboard,
   fetchMembers,
   postMemberData,
   updateMemberDetails,
@@ -97,6 +98,16 @@ export const useCheckPlacement = (placementId) => {
     queryKey: ["checkPlacement", placementId],
     queryFn: () => checkPlacement(placementId),
     enabled: !!placementId && placementId.length >= 3,
+    refetchOnWindowFocus: false,
+    retry: 1,
+  });
+};
+
+// Hook to check Sponsor existence
+export const useMemberDash = (memberId) => {
+  return useQuery({
+    queryKey: ["member-dashboard", memberId],
+    queryFn: () => fetchMemberDashboard(memberId),
     refetchOnWindowFocus: false,
     retry: 1,
   });
