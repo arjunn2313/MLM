@@ -1,0 +1,16 @@
+.node__root > circle {
+    fill: #007bff16;
+  }
+  
+  .tree-label {
+    margin-top: 10%;
+    font-weight: bold;
+    color: #007bff;
+  }
+  
+  .tree-container .tree-link {
+    stroke: rgba(213, 213, 213, 1);
+    stroke-width: 1px;
+    fill: none;
+  }
+  

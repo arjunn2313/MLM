@@ -26,11 +26,9 @@ export const useCreateMember = () => {
   return useMutation({
     mutationFn: postMemberData,
     onSuccess: (data) => {
-      console.log("Member successfully created:");
       toast.success("Member successfully created!");
     },
     onError: (error) => {
-      console.error("Error creating member:", error);
       toast.error(error?.response?.data?.message || "Something went wrong!");
     },
   });
@@ -44,7 +42,6 @@ export const useMemberDetails = (memberId) => {
     refetchOnWindowFocus: false,
   });
 };
-
 
 //PUT --- HOOK FOR UPDATING AGENT DETAILS
 export const useUpdateMemberDetails = () => {

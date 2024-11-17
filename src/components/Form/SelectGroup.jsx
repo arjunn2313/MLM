@@ -19,9 +19,7 @@ const SelectGroup = ({
     <div>
       <label className="block text-sm font-medium text-gray-700">{label}</label>
       <div
-        className={`flex items-center border mt-1 rounded-md overflow-hidden ${
-          error ? "border-red-600" : "border-gray-600"
-        }`}
+        className={`flex items-center border mt-1 rounded-md overflow-hidden  `}
       >
         <select
           {...register(selectName, { required: "Relation is required" })}
