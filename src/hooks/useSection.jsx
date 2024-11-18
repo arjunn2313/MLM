@@ -1,7 +1,9 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import {
+  fetchAllIncomplete,
   fetchCompleted,
   fetchDownline,
+  fetchFilters,
   fetchIncomplete,
   fetchIncompleteNodeTree,
   fetchNodeTree,
@@ -94,11 +96,21 @@ export const useTreeMemebersList = (page, search, treeName) => {
   });
 };
 
-//GET --- HOOK FOR GETING ALL INCOMPLETE MEMBERS LIST
+//GET --- HOOK FOR GETING INCOMPLETE MEMBERS LIST
 export const useIncompleteList = (page, search, treeName) => {
   return useQuery({
     queryKey: ["incomplete-list", page, search, treeName],
     queryFn: () => fetchIncomplete({ page, search, treeName }),
+    refetchOnWindowFocus: false,
+    retry: 1,
+  });
+};
+
+//GET --- HOOK FOR GETING ALL INCOMPLETE MEMBERS LIST
+export const useAllIncompleteList = (page, search,districtName,sectionName,level) => {
+  return useQuery({
+    queryKey: ["all-incomplete-list", page, search,districtName,sectionName,level],
+    queryFn: () =>fetchAllIncomplete({ page, search,districtName,sectionName,level}),
     refetchOnWindowFocus: false,
     retry: 1,
   });
@@ -109,6 +121,17 @@ export const useCompletedList = (page, search, treeName) => {
   return useQuery({
     queryKey: ["completed-list", page, search, treeName],
     queryFn: () => fetchCompleted({ page, search, treeName }),
+    refetchOnWindowFocus: false,
+    retry: 1,
+  });
+};
+
+
+//GET --- HOOK FOR GETING ALL FILTER DATA
+export const useFilter = (districtName) => {
+  return useQuery({
+    queryKey: ["filter",districtName],
+    queryFn: () => fetchFilters(districtName),
     refetchOnWindowFocus: false,
     retry: 1,
   });

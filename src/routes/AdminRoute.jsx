@@ -9,6 +9,9 @@ import BranchList from "../pages/admin/Tree/Branch/BranchList";
 import HeadConditions from "../pages/admin/Tree/Branch/HeadConditions";
 import DistrictList from "../pages/admin/Tree/District/DistrictList";
 import BranchLayout from "../pages/admin/Tree/Structure/BranchLayout";
+import IncompletTable from "../pages/admin/IncompletedTree/IncompletTable"
+import IncompleteDashboard from "../pages/admin/IncompletedTree/IncompleteDashboard";
+import CompletedTable from "../pages/admin/CompletedTree/CompletedTable";
 
 const AdminRoute = [
   {
@@ -42,6 +45,20 @@ const AdminRoute = [
         path: "district/:name/:districtId/tree/:treeId/:headId/:treeName",
         element: <BranchLayout />,
       }
+    ],
+  },
+  {
+    path: "incomplete-tree",
+    children: [
+      { path: "", element: <IncompletTable /> },
+      { path: ":memberId/tree-view", element: <IncompleteDashboard /> },
+    ],
+  },
+  {
+    path: "completed-tree",
+    children: [
+      { path: "", element: <CompletedTable /> },
+      // { path: ":memberId/tree-view", element: <IncompleteDashboard /> },
     ],
   },
 ];

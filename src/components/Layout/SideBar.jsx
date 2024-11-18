@@ -20,7 +20,7 @@ const Sidebar = ({ items }) => {
         </div>
       </div>
       <div className="overflow-hidden hover:overflow-y-auto scrollbar-hide pt-2">
-        <ul className="text-[20px] p-5 flex flex-col gap-8">
+        <ul className="text-[20px] p-5 flex flex-col gap-5">
           {items.map((item, index) => (
             <li key={index} className="mb-4">
               <NavLink

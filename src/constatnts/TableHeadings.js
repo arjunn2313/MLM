@@ -49,8 +49,6 @@ export const allMemberList = [
   "Placement",
   "Action",
 ];
- 
- 
 
 // ALL Incomplete LIST
 export const incompleteList = [
@@ -60,5 +58,18 @@ export const incompleteList = [
   "Level",
   "Placement",
   "Downline",
+  "Action",
+];
+
+// ALL Incomplete LIST
+export const allIncompleteList = [
+  "Sl. no.",
+  "	Tree District",
+  "	Tree Name",
+  "Member ID",
+  "Name",
+  "	Level",
+  "Placement",
+  "	Downline",
   "Action",
 ];
