@@ -13,10 +13,10 @@ import {
 import toast from "react-hot-toast";
 
 //GET ---- HOOK FOR FETCHING LIST OF ALL MEMBERS (----FILTERING QUERYS ARE ADDED-----)
-export const useMemberList = (limit, page, search) => {
+export const useMemberList = (page, search,districtName,sectionName,level) => {
   return useQuery({
-    queryKey: ["members", limit, page, search],
-    queryFn: () => fetchMembers({ limit, page, search }),
+    queryKey: ["members",page, search,districtName,sectionName,level],
+    queryFn: () => fetchMembers({page, search,districtName,sectionName,level}),
     keepPreviousData: true,
     refetchOnWindowFocus: false,
   });

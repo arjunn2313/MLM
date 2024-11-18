@@ -13,7 +13,7 @@ export default function Preview() {
   const { data, isLoading, error } = useMemberDetails(memberId);
   const navigate = useNavigate()
 
-  if (isLoading) return <Spinner size="10" borderSize="3" />;
+  if (isLoading) return <Spinner   />;
 
   return (
     <div className="container mx-auto ">

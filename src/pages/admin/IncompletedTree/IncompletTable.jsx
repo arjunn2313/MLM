@@ -32,7 +32,7 @@ export default function IncompletTable() {
   const { data,isLoading } = useAllIncompleteList(currentPage,searchQuery,selectedDistrict,selectedTreeName,selectedLevel);
   const { data: filter, error } = useFilter(selectedDistrict);
 
-  console.log(filter);
+ 
 
   const totalPages = data?.totalPages || 1;
 
@@ -40,15 +40,13 @@ export default function IncompletTable() {
     setCurrentPage(page);
   };
 
-  const handleStatusChange = (status) => {
-    setSelectedStatus(status);
-  };
+ 
   return (
     <React.Fragment>
       <div className="container bg-white mx-auto p-4 ">
         <div className="flex justify-between items-center mb-4">
           <div className="flex items-center  gap-6">
-            <Heading text="Incomplete Trees" />
+            <Heading text="Incomplete Trees" color="default"/>
             <FilterSelect
               type="Tree District"
               options={["All", ...(filter?.districtNames || [])]}

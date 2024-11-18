@@ -73,3 +73,12 @@ export const allIncompleteList = [
   "	Downline",
   "Action",
 ];
+
+// district head
+export const districtHead = [
+  "Sl. no.",
+  "District",
+  "Head Name",
+  "Number of Trees",
+  "	Action"
+]

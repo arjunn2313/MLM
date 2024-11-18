@@ -13,12 +13,7 @@ import Pagination from "../../../components/Pagination/Pagination";
 export default function RegisterTable() {
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const limit = 10;
-  const { data, isLoading, error } = useMemberList(
-    limit,
-    currentPage,
-    searchQuery
-  );
+  const { data, isLoading, error } = useMemberList(currentPage, searchQuery);
 
   const totalPages = data?.totalPages || 1;
 

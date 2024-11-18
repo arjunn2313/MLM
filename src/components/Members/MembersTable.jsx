@@ -7,8 +7,8 @@ import TablePlaceholder from "../loaders/TableSkelton";
 
 export default function MembersTable() {
   const navigate = useNavigate();
-  const limit = 5;
-  const { data, isLoading, error } = useMemberList(limit);
+ 
+  const { data, isLoading, error } = useMemberList();
 
   return (
     <div className="bg-white p-6 rounded-lg shadow-md mt-5">

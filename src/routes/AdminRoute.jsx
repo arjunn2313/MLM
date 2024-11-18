@@ -12,6 +12,16 @@ import BranchLayout from "../pages/admin/Tree/Structure/BranchLayout";
 import IncompletTable from "../pages/admin/IncompletedTree/IncompletTable"
 import IncompleteDashboard from "../pages/admin/IncompletedTree/IncompleteDashboard";
 import CompletedTable from "../pages/admin/CompletedTree/CompletedTable";
+import CompletedDashboard from "../pages/admin/CompletedTree/CompletedDashboard";
+import LevelsAnalyzer from "../pages/admin/Levels/LevelsAnalyzer";
+import MembersTable from "../pages/admin/Members/MembersTable";
+import MemberDashView from "../pages/admin/Members/MemberDashView";
+import Refferal from "../pages/admin/Wallets/Refferal/Refferal";
+import Commision from "../pages/admin/Wallets/Commision/Commision";
+import Settings from "../pages/admin/Wallets/Settings/Settings";
+import HeadsList from "../pages/admin/DistrictHead/HeadsList";
+import HeadRegForm from "../pages/admin/DistrictHead/HeadRegForm";
+import HeadPreview from "../pages/admin/DistrictHead/HeadPreview";
 
 const AdminRoute = [
   {
@@ -58,7 +68,35 @@ const AdminRoute = [
     path: "completed-tree",
     children: [
       { path: "", element: <CompletedTable /> },
-      // { path: ":memberId/tree-view", element: <IncompleteDashboard /> },
+      { path: ":memberId/tree-view", element: <CompletedDashboard /> },
+    ],
+  },
+  {
+    path: "levels-tracking",
+    children: [{ path: "", element: <LevelsAnalyzer/> }],
+  },
+  {
+    path: "members",
+    children: [
+      { path: "", element: <MembersTable /> },
+      { path: ":memberId", element: <MemberDashView /> },
+      // { path: ":memberId/expense", element: <MemberExpense /> },
+    ],
+  },
+  {
+    path: "wallet",
+    children: [
+      { index:true,path: "commission", element: <Commision /> },
+      { path: "referal", element: <Refferal /> },
+      { path: "settings", element: <Settings /> },
+    ],
+  },
+  {
+    path: "district-head",
+    children: [
+      { path: "", element: <HeadsList /> },
+      { path: "registration", element: <HeadRegForm /> },
+      { path: "preview/:memberId", element: <HeadPreview /> },
     ],
   },
 ];

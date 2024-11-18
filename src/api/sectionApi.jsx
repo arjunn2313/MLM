@@ -134,6 +134,28 @@ export const fetchCompleted = async ({
   return response.data;
 };
 
+// GET LIST OF ALL COMPLETE   MEMBERS
+export const fetchAllComplete = async ({
+  limit = 10,
+  page = 1,
+  search = "",
+  districtName = "",
+  sectionName = "",
+  level = "",
+}) => {
+  const response = await api.get(`/api/admin/section/all-complete-members`, {
+    params: {
+      limit,
+      page,
+      search,
+      ...(districtName !== "All" && { districtName }),
+      ...(sectionName !== "All" && { sectionName }),
+      ...(level !== "All" && { level }),
+    },
+  });
+  return response.data;
+};
+
 // GET LIST OF FILTER CATEGORY
 export const fetchFilters = async (districtName = "") => {
   const response = await api.get(`/api/admin/section/incomplete-filter`, {

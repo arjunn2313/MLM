@@ -1,5 +1,6 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import {
+  fetchAllComplete,
   fetchAllIncomplete,
   fetchCompleted,
   fetchDownline,
@@ -121,6 +122,16 @@ export const useCompletedList = (page, search, treeName) => {
   return useQuery({
     queryKey: ["completed-list", page, search, treeName],
     queryFn: () => fetchCompleted({ page, search, treeName }),
+    refetchOnWindowFocus: false,
+    retry: 1,
+  });
+};
+
+//GET --- HOOK FOR GETING ALL COMPLETE MEMBERS LIST
+export const useAllCompleteList = (page, search,districtName,sectionName,level) => {
+  return useQuery({
+    queryKey: ["all-complete-list", page, search,districtName,sectionName,level],
+    queryFn: () =>fetchAllComplete({ page, search,districtName,sectionName,level}),
     refetchOnWindowFocus: false,
     retry: 1,
   });
