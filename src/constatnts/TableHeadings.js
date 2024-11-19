@@ -107,3 +107,37 @@ export const snacksList = [
   "GST",
   "Status",
 ];
+
+// STOCK
+export const crackersStockList = [
+  "Sl. no.",
+  "Product Code",
+  "Category",
+  "Product",
+  "Quantity",
+  "Pieces",
+  "Updated On",
+];
+
+// expense
+export const expenseList = [
+  "Sl. no.",
+  "	Date",
+  "Category",
+  "Sub Category",
+  "Spent For",
+  "	Amount",
+  "	Status",
+];
+
+// delivery and tracking
+export const deliveryList = [
+  "Sl. no.",
+  "	Date",
+  "Invoice number",
+  "Name",
+  "Location",
+  "Contact Number",
+  "Products",
+  "Tracking ID",
+];

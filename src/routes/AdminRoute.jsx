@@ -30,6 +30,11 @@ import SnacksStock from "../pages/ecommerce/Snacks/Stock/SnacksStock";
 import SnacksNewStock from "../pages/ecommerce/Snacks/Stock/SnacksNewStock";
 import SnacksDataUpload from "../pages/ecommerce/Snacks/Upload/SnacksDataUpload";
 import SnacksPreview from "../pages/ecommerce/Snacks/Upload/SnacksPreview";
+import CrackersDashboard from "../pages/ecommerce/Crackers/Dashboard/CrackersDashboard";
+import CrackersStock from "../pages/ecommerce/Crackers/Stock/CrackersStock";
+import ExpenseList from "../pages/ecommerce/Expense/ExpenseList";
+import Review from "../pages/ecommerce/ReviewsAndRatings/Review";
+import Delivery from "../pages/ecommerce/Delivery/Delivery";
 
 const AdminRoute = [
   {
@@ -124,6 +129,31 @@ const AdminRoute = [
       // { path: "stock/update/:id", element: <SnaksUpdateProduct /> },
       { path: "", element: <Navigate to="dashboard" /> },
     ],
+  },
+  {
+    path: "crackers",
+    children: [
+      { path: "dashboard", element: <CrackersDashboard /> },
+      // { path: "list", element: <CrackersList /> },
+      // { path: "list/add", element: <CrackersUploadProducts /> },
+      // { path: "list/preview/:id", element: <ProductPreview /> },
+      // { path: "list/edit/:id", element: <UpdateProductForm /> },
+      { path: "stock", element: <CrackersStock /> },
+      // { path: "stock/new", element: <NewProduct /> },
+      // { path: "stock/edit/:id", element: <CrackersStockEdit /> },
+    ],
+  },
+  {
+    path: "expense",
+    children: [{ path: "", element: <ExpenseList/> }],
+  },
+  {
+    path: "delivery",
+    children: [{ path: "", element: <Delivery /> }],
+  },
+  {
+    path: "reviews",
+    children: [{ path: "", element: <Review /> }],
   },
 ];
 

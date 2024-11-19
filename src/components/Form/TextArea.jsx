@@ -1,15 +1,11 @@
-const TextareaField = ({ label, name, register }) => {
-  return (
-    <div>
-      <label className="block text-sm font-medium">{label}</label>
-      <textarea
-        {...register(name)}
-        rows="4"
-        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-200"
-      />
-      {/* {error && <p className="text-red-500 text-sm mt-1">{error.message}</p>} */}
-    </div>
-  );
-};
-
-export default TextareaField;
+export const TextAreaField = ({ label, name, placeholder, register, error }) => (
+  <div>
+    <label className="block text-sm font-medium text-gray-700">{label}</label>
+    <textarea
+      placeholder={placeholder}
+      className="mt-1 block w-full p-2 h-20 border rounded-md"
+      {...register(name, { required: "This field is required" })}
+    />
+    {error && <span className="text-red-500 text-sm mt-1">{error.message}</span>}
+  </div>
+);
