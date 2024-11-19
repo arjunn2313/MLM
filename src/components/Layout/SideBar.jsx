@@ -44,7 +44,12 @@ const Sidebar = ({ items }) => {
                   />
                 )}
               </NavLink>
-
+              {item.subHeading && 
+               <li className=" flex items-center text-orange-800 font-bold border-b-2 border-orange-800">
+               {item.subicon && <item.subicon className="mr-2" />}
+               <span>{item.subHeading}</span>
+               </li>
+}
               {/* Check if the item has a submenu */}
               {item.submenu && openSubmenu === index && (
                 <div className="ml-2 mt-2 flex flex-col space-y-3 text-[15px] relative">

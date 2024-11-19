@@ -4,11 +4,15 @@ const FileUploadField = ({
   register,
   error,
   accept = "image/*,application/pdf",
+  multiple = false, 
 }) => {
   return (
     <div>
-      <label className="block text-sm font-medium text-gray-700 mb-1">{label}</label>
+      <label className="block text-sm font-medium text-gray-700 mb-1">
+        {label}
+      </label>
       <input
+        multiple={multiple}
         {...register(name, { required: "This field is required" })}
         type="file"
         accept={accept}

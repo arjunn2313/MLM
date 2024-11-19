@@ -80,5 +80,30 @@ export const districtHead = [
   "District",
   "Head Name",
   "Number of Trees",
-  "	Action"
-]
+  "	Action",
+];
+
+///////////////////////////////////////////////ECOMMERCE PRODUCT//////////////////////////////////////////////////////////
+
+// STOCK
+export const snacksStockList = [
+  "Sl. no.",
+  "Product Code",
+  "Category",
+  "Product",
+  "Available Quantity",
+  "Updated On",
+];
+
+// SnacksList
+export const snacksList = [
+  "Sl. no.",
+  "Posted on",
+  "Code",
+  "Category",
+  "Product",
+  "Weights",
+  "Price",
+  "GST",
+  "Status",
+];

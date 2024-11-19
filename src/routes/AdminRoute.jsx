@@ -9,7 +9,7 @@ import BranchList from "../pages/admin/Tree/Branch/BranchList";
 import HeadConditions from "../pages/admin/Tree/Branch/HeadConditions";
 import DistrictList from "../pages/admin/Tree/District/DistrictList";
 import BranchLayout from "../pages/admin/Tree/Structure/BranchLayout";
-import IncompletTable from "../pages/admin/IncompletedTree/IncompletTable"
+import IncompletTable from "../pages/admin/IncompletedTree/IncompletTable";
 import IncompleteDashboard from "../pages/admin/IncompletedTree/IncompleteDashboard";
 import CompletedTable from "../pages/admin/CompletedTree/CompletedTable";
 import CompletedDashboard from "../pages/admin/CompletedTree/CompletedDashboard";
@@ -22,6 +22,14 @@ import Settings from "../pages/admin/Wallets/Settings/Settings";
 import HeadsList from "../pages/admin/DistrictHead/HeadsList";
 import HeadRegForm from "../pages/admin/DistrictHead/HeadRegForm";
 import HeadPreview from "../pages/admin/DistrictHead/HeadPreview";
+ 
+import { Navigate } from "react-router-dom";
+import SnacksDashboard from "../pages/ecommerce/Snacks/Dashboard/SnacksDashboard";
+import SnacksList from "../pages/ecommerce/Snacks/Upload/SnacksList";
+import SnacksStock from "../pages/ecommerce/Snacks/Stock/SnacksStock";
+import SnacksNewStock from "../pages/ecommerce/Snacks/Stock/SnacksNewStock";
+import SnacksDataUpload from "../pages/ecommerce/Snacks/Upload/SnacksDataUpload";
+import SnacksPreview from "../pages/ecommerce/Snacks/Upload/SnacksPreview";
 
 const AdminRoute = [
   {
@@ -45,16 +53,19 @@ const AdminRoute = [
     path: "tree",
     children: [
       {
-        path:"district",
+        path: "district",
         element: <DistrictList />,
       },
       { path: "district/:name/:districtId", element: <BranchList /> },
       { path: "district/:name/:districtId/new-tree", element: <BranchForm /> },
-      { path: "district/:name/:districtId/new-tree/terms-and-condition", element: <HeadConditions /> },
+      {
+        path: "district/:name/:districtId/new-tree/terms-and-condition",
+        element: <HeadConditions />,
+      },
       {
         path: "district/:name/:districtId/tree/:treeId/:headId/:treeName",
         element: <BranchLayout />,
-      }
+      },
     ],
   },
   {
@@ -73,7 +84,7 @@ const AdminRoute = [
   },
   {
     path: "levels-tracking",
-    children: [{ path: "", element: <LevelsAnalyzer/> }],
+    children: [{ path: "", element: <LevelsAnalyzer /> }],
   },
   {
     path: "members",
@@ -86,9 +97,10 @@ const AdminRoute = [
   {
     path: "wallet",
     children: [
-      { index:true,path: "commission", element: <Commision /> },
+      { index: true, path: "commission", element: <Commision /> },
       { path: "referal", element: <Refferal /> },
       { path: "settings", element: <Settings /> },
+      { path: "", element: <Navigate to="commission" /> },
     ],
   },
   {
@@ -97,6 +109,20 @@ const AdminRoute = [
       { path: "", element: <HeadsList /> },
       { path: "registration", element: <HeadRegForm /> },
       { path: "preview/:memberId", element: <HeadPreview /> },
+    ],
+  },
+  {
+    path: "snacks",
+    children: [
+      { path: "dashboard", element: <SnacksDashboard /> },
+      { path: "list", element: <SnacksList /> },
+      { path: "list/add", element: <SnacksDataUpload/> },
+      { path: "list/preview/:id", element: <SnacksPreview /> },
+      // { path: "list/edit/:id", element: <SnacksUpdateProductForm /> },
+      { path: "stock", element: <SnacksStock /> },
+      { path: "stock/new", element: <SnacksNewStock /> },
+      // { path: "stock/update/:id", element: <SnaksUpdateProduct /> },
+      { path: "", element: <Navigate to="dashboard" /> },
     ],
   },
 ];

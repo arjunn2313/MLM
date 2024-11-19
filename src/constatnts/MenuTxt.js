@@ -5,7 +5,7 @@ import { GoCodeReview } from "react-icons/go";
 import { ImTree } from "react-icons/im";
 import { IoIosCheckboxOutline } from "react-icons/io";
 import { IoPeopleOutline } from "react-icons/io5";
-import { MdOutlineDashboard } from "react-icons/md";
+import { MdOutlineDashboard, MdOutlineShoppingCart } from "react-icons/md";
 import { PiCookieThin, PiUsersThreeBold } from "react-icons/pi";
 import {
   TbBinaryTree,
@@ -35,7 +35,7 @@ const Management = [
   },
   { label: "District Head", icon: PiUsersThreeBold, path: "/district-head" },
   { label: "Reports", icon: TbFileDescription, path: "/reports" },
-
+  { subHeading: "E- Commerce", subicon: MdOutlineShoppingCart },
   {
     label: "Snacks",
     icon: PiCookieThin,

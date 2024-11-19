@@ -10,6 +10,7 @@ export default function MemberPreviewCard({data}) {
           {memberKey.map((key, ind) => (
             <p key={ind}>{key}</p>
           ))}
+        
         </div>
         <div className="space-y-2 sm:space-y-4">
           <p>{data?.memberId}</p>

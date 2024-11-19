@@ -9,6 +9,8 @@ const InputField = ({
   isError,
   isLoading,
   disabled = false,
+  isProduct,
+  productError
 }) => (
   <div>
     <label className="block text-sm font-medium text-gray-700">{label}</label>
@@ -34,13 +36,25 @@ const InputField = ({
         Checking for sponsor details...
       </span>
     )}
-    
+
+    {isProduct && (
+      <span className="text-gray-500 text-sm mt-1">
+        Checking for product details...
+      </span>
+    )}
+
     {!isLoading && error && (
       <span className="text-red-500 text-sm mt-1">{error.message}</span>
     )}
     {!isLoading && isError && !error && (
       <span className="text-red-500 text-sm mt-1">
         {isError?.response?.data?.error}
+      </span>
+    )}
+
+    {!isProduct && productError && !error && (
+      <span className="text-red-500 text-sm mt-1">
+         Product not found  
       </span>
     )}
   </div>
