@@ -1,7 +1,8 @@
 import { BiLockAlt } from "react-icons/bi";
 import { FaClipboardList } from "react-icons/fa";
-import { GiLevelEndFlag } from "react-icons/gi";
+import { GiFireworkRocket, GiLevelEndFlag } from "react-icons/gi";
 import { GoCodeReview } from "react-icons/go";
+import { GrMoney } from "react-icons/gr";
 import { ImTree } from "react-icons/im";
 import { IoIosCheckboxOutline } from "react-icons/io";
 import { IoPeopleOutline } from "react-icons/io5";
@@ -48,7 +49,7 @@ const Management = [
   },
   {
     label: "Crackers",
-    icon: FaClipboardList,
+    icon: GiFireworkRocket ,
     path: "/crackers",
     submenu: [
       { label: "Dashboard", path: "/crackers/dashboard" },
@@ -58,7 +59,7 @@ const Management = [
   },
   { label: "Orders", icon: IoIosCheckboxOutline, path: "/orders" },
   { label: "Delivery Tracking", icon: TbTruckDelivery, path: "/delivery" },
-  { label: "Expense", icon: TbTruckDelivery, path: "/expense" },
+  { label: "Expense", icon: GrMoney , path: "/expense" },
   { label: "Reviews & Ratings", icon: GoCodeReview, path: "/reviews" },
 ];
 

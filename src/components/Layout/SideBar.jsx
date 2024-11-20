@@ -15,7 +15,7 @@ const Sidebar = ({ items }) => {
   return (
     <div className="w-64 bg-white h-screen flex flex-col  shadow-lg">
       <div className="flex items-center mt-2">
-        <div className="bg-primary text-white px-10 py-1 my-3  text-2xl  text-center rounded-r-full  font-bold">
+        <div className="bg-primary text-white px-10 py-1 my-2  text-2xl  text-center rounded-r-full  font-bold">
           S I P
         </div>
       </div>
