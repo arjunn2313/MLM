@@ -7,6 +7,7 @@ import {
   postProductData,
   postProductInstance,
   postProductStatus,
+  postProductStock,
 } from "../api/productApi";
 import toast from "react-hot-toast";
 
@@ -97,6 +98,19 @@ export const useUpdateProductStatus= () =>{
     mutationFn : postProductStatus,
     onSuccess: (data) => {
       toast.success("Successfully Status Updated!");
+    },
+    onError: (error) => {
+      toast.error(error?.response?.data?.message || "Something went wrong!");
+    },
+  })
+}
+
+// PUT -- UPDATE PRODUCT STOCK
+export const useUpdateProductStock= () =>{
+  return useMutation({
+    mutationFn : postProductStock,
+    onSuccess: (data) => {
+      toast.success("Successfully Stock Updated!");
     },
     onError: (error) => {
       toast.error(error?.response?.data?.message || "Something went wrong!");

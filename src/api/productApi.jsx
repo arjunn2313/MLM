@@ -31,35 +31,46 @@ export const fetchProductCategory = async (category) => {
 };
 
 // CREATE PRODUCT INSTANCE
-export const postProductInstance = async ({data,category}) => {
-  const response = await api.post(`/api/admin/product/create`, data,{
-    params:{category}
+export const postProductInstance = async ({ data, category }) => {
+  const response = await api.post(`/api/admin/product/create`, data, {
+    params: { category },
   });
   return response.data;
 };
 
 // FETCH PRODUCT CATEGORIES
 export const fetchProductInstance = async (productCode) => {
-  const response = await api.get(`/api/admin/product/not-active/${productCode}`);
+  const response = await api.get(
+    `/api/admin/product/not-active/${productCode}`
+  );
   return response.data;
 };
 
-
 // UPADTE PRODUCT INSTANCE
-export const postProductData = async ({productCode,formData}) =>{
-  const response = await api.put(`/api/admin/product/update-instance/${productCode}`,formData);
+export const postProductData = async ({ productCode, formData }) => {
+  const response = await api.put(
+    `/api/admin/product/update-instance/${productCode}`,
+    formData
+  );
   return response.data;
-}
-
+};
 
 // GET PRODUCT DETAILS
-export const fetchProductDetails = async (id) =>{
+export const fetchProductDetails = async (id) => {
   const response = await api.get(`/api/admin/product/details/${id}`);
   return response.data;
-}
+};
 
 // UPADTE PRODUCT STATUS
-export const postProductStatus = async ({status,id}) =>{
-  const response = await api.put(`/api/admin/product/update-status/${id}`,{status});
+export const postProductStatus = async ({ status, id }) => {
+  const response = await api.put(`/api/admin/product/update-status/${id}`, {
+    status,
+  });
   return response.data;
-}
+};
+
+// UPADTE PRODUCT STOCK
+export const postProductStock = async ({ id, ...data }) => {
+  const response = await api.put(`/api/admin/product/update-stock/${id}`, data);
+  return response.data;
+};

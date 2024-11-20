@@ -23,6 +23,7 @@
     "react-phone-number-input": "^3.4.9",
     "react-router-dom": "^6.28.0",
     "react-switch": "^7.0.0",
+    "react-to-print": "^3.0.2",
     "recharts": "^2.13.3"
   },
   "devDependencies": {

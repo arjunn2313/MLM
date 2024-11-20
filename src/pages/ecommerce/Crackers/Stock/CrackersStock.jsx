@@ -111,7 +111,7 @@ export default function CrackersStock() {
 
                     <td className="p-2 block md:table-cell">
                       <Link
-                        to={`${data?.memberId}`}
+                        to={`edit/${data?._id}`}
                         className="text-primary hover:text-blue-700 border p-2 rounded-md border-primary"
                       >
                         Add More

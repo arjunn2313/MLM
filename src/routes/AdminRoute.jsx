@@ -22,7 +22,7 @@ import Settings from "../pages/admin/Wallets/Settings/Settings";
 import HeadsList from "../pages/admin/DistrictHead/HeadsList";
 import HeadRegForm from "../pages/admin/DistrictHead/HeadRegForm";
 import HeadPreview from "../pages/admin/DistrictHead/HeadPreview";
- 
+
 import { Navigate } from "react-router-dom";
 import SnacksDashboard from "../pages/ecommerce/Snacks/Dashboard/SnacksDashboard";
 import SnacksList from "../pages/ecommerce/Snacks/Upload/SnacksList";
@@ -35,6 +35,15 @@ import CrackersStock from "../pages/ecommerce/Crackers/Stock/CrackersStock";
 import ExpenseList from "../pages/ecommerce/Expense/ExpenseList";
 import Review from "../pages/ecommerce/ReviewsAndRatings/Review";
 import Delivery from "../pages/ecommerce/Delivery/Delivery";
+import OrderList from "../pages/ecommerce/Orders/OrderList";
+import OrderDetails from "../pages/ecommerce/Orders/OrderDetails";
+import OrderInvoice from "../pages/ecommerce/Orders/OrderInvoice";
+import CrackersList from "../pages/ecommerce/Crackers/Upload/CrackersList";
+import CrackersNewStock from "../pages/ecommerce/Crackers/Stock/CrackersNewStock";
+import CrackersPreview from "../pages/ecommerce/Crackers/Upload/CrackersPreview";
+import CrackersDataUpload from "../pages/ecommerce/Crackers/Upload/CrackersDataUpload";
+import CrackersUpdateStock from "../pages/ecommerce/Crackers/Stock/CrackersUpdateStock";
+import SnacksUpdateStock from "../pages/ecommerce/Snacks/Stock/SnacksUpdateStock";
 
 const AdminRoute = [
   {
@@ -121,12 +130,12 @@ const AdminRoute = [
     children: [
       { path: "dashboard", element: <SnacksDashboard /> },
       { path: "list", element: <SnacksList /> },
-      { path: "list/add", element: <SnacksDataUpload/> },
+      { path: "list/add", element: <SnacksDataUpload /> },
       { path: "list/preview/:id", element: <SnacksPreview /> },
       // { path: "list/edit/:id", element: <SnacksUpdateProductForm /> },
       { path: "stock", element: <SnacksStock /> },
       { path: "stock/new", element: <SnacksNewStock /> },
-      // { path: "stock/update/:id", element: <SnaksUpdateProduct /> },
+      { path: "stock/edit/:id", element: <SnacksUpdateStock /> },
       { path: "", element: <Navigate to="dashboard" /> },
     ],
   },
@@ -134,18 +143,28 @@ const AdminRoute = [
     path: "crackers",
     children: [
       { path: "dashboard", element: <CrackersDashboard /> },
-      // { path: "list", element: <CrackersList /> },
-      // { path: "list/add", element: <CrackersUploadProducts /> },
-      // { path: "list/preview/:id", element: <ProductPreview /> },
+      { path: "list", element: <CrackersList /> },
+      { path: "list/add", element: <CrackersDataUpload /> },
+      { path: "list/preview/:id", element: <CrackersPreview /> },
       // { path: "list/edit/:id", element: <UpdateProductForm /> },
       { path: "stock", element: <CrackersStock /> },
-      // { path: "stock/new", element: <NewProduct /> },
-      // { path: "stock/edit/:id", element: <CrackersStockEdit /> },
+      { path: "stock/new", element: <CrackersNewStock /> },
+      { path: "stock/edit/:id", element: <CrackersUpdateStock /> },
+      { path: "", element: <Navigate to="dashboard" /> },
+      ,
     ],
   },
   {
     path: "expense",
-    children: [{ path: "", element: <ExpenseList/> }],
+    children: [{ path: "", element: <ExpenseList /> }],
+  },
+  {
+    path: "orders",
+    children: [
+      { path: "", element: <OrderList /> },
+      { path: "details/:id", element: <OrderDetails /> },
+      { path: "invoice/:id", element: <OrderInvoice /> },
+    ],
   },
   {
     path: "delivery",

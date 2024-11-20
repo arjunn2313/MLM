@@ -1,51 +1,31 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { useProductDetails, useUpdateProductStatus } from "../../../../hooks/useProduct";
 import Heading from "../../../../components/Headings/Headings";
 import { CiEdit } from "react-icons/ci";
-import { useParams, useNavigate } from "react-router-dom";
-import { useProductDetails, useUpdateProductStatus } from "../../../../hooks/useProduct";
-import { LuUpload } from "react-icons/lu";
 import ProductPreviewCard from "../../../../components/Product/ProductPreviewCard";
-import toast from "react-hot-toast";
 import Spinner from "../../../../components/loaders/Spinner";
+import { LuUpload } from "react-icons/lu";
 
-export default function SnacksPreview() {
+export default function CrackersPreview() {
   const { id } = useParams();
   const { data,isLoading } = useProductDetails(id);
-  const [status, setStatus] = useState(data?.status);
+  const [status, setStatus] = useState("");
   const navigate = useNavigate();
+  const { mutate } = useUpdateProductStatus();
 
- 
-
-  const handleImageUpload = async (e, index) => {
-    const file = e.target.files[0];
-
-    const validImageTypes = ["image/jpeg", "image/png", "image/gif"];
-    // if (file && validImageTypes.includes(file.type)) {
-    //   const numericIndex = Number(index);
-
-    //   const updatedPhotos = [...formData.photos];
-    //   updatedPhotos[numericIndex] = URL.createObjectURL(file);
-    //   setFormData({ ...formData, photos: updatedPhotos });
-
-    //   const formDataToSend = new FormData();
-    //   formDataToSend.append("productImage", file);
-    //   formDataToSend.append("index", numericIndex);
-
-    //   try {
- 
-    //   } catch (error) {
-    //     console.error("Error uploading image:", error);
-    //   }  
-    // } else {
-    //   toast.error("Please upload a valid image file (JPEG, PNG, GIF)");
-    // }
+  const handleUpdate = () => {
+    mutate({ status, id });
   };
 
-  const {mutate} = useUpdateProductStatus()
+  useEffect(() => {
+    if (data) {
+      setStatus(data?.status);  
+    }
+  }, [data]);
 
-  const handleUpdate = () =>{
-    mutate({status,id})
-  }
+  const handleImageUpload = () => {}
+  if(isLoading) return <Spinner/>
 
   return (
     <div className="container mx-auto bg-white p-4">
@@ -64,25 +44,6 @@ export default function SnacksPreview() {
 
       {/* CARD */}
       <ProductPreviewCard data={data} />
-
-      <div className="grid grid-cols-1 sm:grid-cols-2   p-3">
-        <div className="flex flex-col sm:flex-row gap-8 sm:gap-28">
-          {data?.weight?.map((wt) => (
-            <>
-              <div className="space-y-2 sm:space-y-4 font-medium">
-                <p>Weight</p>
-                <p>Price</p>
-              </div>
-              <div className="space-y-2 sm:space-y-4">
-                <p>
-                  {wt?.value} {wt?.unit}
-                </p>
-                <p>{wt?.price} Rs</p>
-              </div>
-            </>
-          ))}
-        </div>
-      </div>
 
       {/* Status */}
       <div className="mt-5 grid grid-cols-2 w-3/4 ml-3">
@@ -153,8 +114,9 @@ export default function SnacksPreview() {
 
       {/* Upload Button */}
       <div className="flex items-end justify-end">
-        <button className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
-        onClick={handleUpdate}
+        <button
+          className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+          onClick={handleUpdate}
         >
           Upload
         </button>

@@ -108,6 +108,23 @@ export const snacksList = [
   "Status",
 ];
 
+// crackers
+export const crackersList = [
+  "Sl. no.",
+  "Posted on",
+  "Code",
+  "Category",
+  "Product",
+  "Quantity",
+  "Pieces",
+  "Price",
+  "GST",
+  "MLM Dis.",
+  "Ref. Dis.",
+  "Nor. Dis.",
+  "Status",
+];
+
 // STOCK
 export const crackersStockList = [
   "Sl. no.",
@@ -140,4 +157,28 @@ export const deliveryList = [
   "Contact Number",
   "Products",
   "Tracking ID",
+];
+
+//  orders
+export const ordersList = [
+  "Sl. no.",
+  "	Date",
+  "Name",
+  "Location",
+  "Contact Number",
+  "Items",
+  "Price",
+  "Status",
+];
+
+// orderDetaildList
+export const orderDetaildList = [
+  "Sl. no.",
+  "Product",
+  "Product Code",
+  "Category",
+  "Product Name",
+  "	Quantity",
+  "Weight",
+  "Price",
 ];
