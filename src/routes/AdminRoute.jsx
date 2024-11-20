@@ -44,6 +44,7 @@ import CrackersPreview from "../pages/ecommerce/Crackers/Upload/CrackersPreview"
 import CrackersDataUpload from "../pages/ecommerce/Crackers/Upload/CrackersDataUpload";
 import CrackersUpdateStock from "../pages/ecommerce/Crackers/Stock/CrackersUpdateStock";
 import SnacksUpdateStock from "../pages/ecommerce/Snacks/Stock/SnacksUpdateStock";
+import Reports from "../pages/admin/Reports/Reports";
 
 const AdminRoute = [
   {
@@ -99,6 +100,14 @@ const AdminRoute = [
   {
     path: "levels-tracking",
     children: [{ path: "", element: <LevelsAnalyzer /> }],
+  },
+  {
+    path: "reports",
+    children: [
+      { path: "", element: <Reports /> },
+      // { path: "income", element: <IncomeList /> },
+      // { path: "expense", element: <ExpenseList /> },
+    ],
   },
   {
     path: "members",

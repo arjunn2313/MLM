@@ -1,9 +1,12 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import {
+  fetchCategorySalesReport,
   fetchProductCategory,
+  fetchProductDashboard,
   fetchProductDetails,
   fetchProductInstance,
   fetchProducts,
+  fetchSalesReport,
   postProductData,
   postProductInstance,
   postProductStatus,
@@ -117,3 +120,34 @@ export const useUpdateProductStock= () =>{
     },
   })
 }
+
+
+// GET --- PRODUCTS DASHBOARD
+export const useProductDashboard = () => {
+  return useQuery({
+    queryKey: ["product-dashboard", ],
+    queryFn: () => fetchProductDashboard(),
+    keepPreviousData: true,
+    refetchOnWindowFocus: false,
+  });
+};
+
+// GET --- PRODUCTS SALES CHARTS
+export const useProductSales = () => {
+  return useQuery({
+    queryKey: ["product-sales", ],
+    queryFn: () => fetchSalesReport(),
+    keepPreviousData: true,
+    refetchOnWindowFocus: false,
+  });
+};
+
+// GET --- PRODUCTS SUB CATEGORY SALES CHARTS
+export const useSubProductSales = () => {
+  return useQuery({
+    queryKey: ["product-sub-sales", ],
+    queryFn: () => fetchCategorySalesReport(),
+    keepPreviousData: true,
+    refetchOnWindowFocus: false,
+  });
+};

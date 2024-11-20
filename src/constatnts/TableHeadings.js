@@ -182,3 +182,15 @@ export const orderDetaildList = [
   "Weight",
   "Price",
 ];
+
+//  orders
+export const ordersDash = [
+  "Sl. no.",
+  "Name",
+  "Location",
+  "Mobile Number",
+  "Products",
+];
+
+// low stock
+export const lowStock = ["Code", "Product", "Quantity"];

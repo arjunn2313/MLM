@@ -1,22 +1,26 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import Heading from "../Headings/Headings";
-import { useMemberList } from "../../hooks/useMember";
-import TablePlaceholder from "../loaders/TableSkelton";
-import { memberList } from "../../constatnts/TableHeadings";
+import Heading from "../../Headings/Headings";
+import TablePlaceholder from "../../loaders/TableSkelton";
+import { ordersDash } from "../../../constatnts/TableHeadings";
+import { useFetchOrders } from "../../../hooks/useOrder";
 
-export default function MembersTable() {
+export default function OrdersTable() {
   const navigate = useNavigate();
- 
-  const { data, isLoading, error } = useMemberList();
+
+  const category = "Snacks";
+
+  const { data, isLoading } = useFetchOrders(category);
+
+  console.log(data);
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md mt-5">
+    <div className="bg-white p-6 rounded-lg shadow-md border border-primary">
       <div className="flex justify-between items-center mb-4">
-        <Heading text="Member List" />
+        <Heading text="Orders" />
         <button
           className=" text-blue-500 border border-blue-500 py-2 px-4 rounded"
-          onClick={() => navigate("/members")}
+          onClick={() => navigate("/orders")}
         >
           View All
         </button>
@@ -28,7 +32,7 @@ export default function MembersTable() {
           <table className="min-w-full border-collapse block md:table">
             <thead className="block md:table-header-group">
               <tr className="block md:table-row">
-                {memberList.map((header, index) => (
+                {ordersDash.map((header, index) => (
                   <th key={index} className="p-2 text-left block md:table-cell">
                     {header}
                   </th>
@@ -37,21 +41,23 @@ export default function MembersTable() {
             </thead>
 
             <tbody className="block md:table-row-group capitalize truncate">
-              {data?.members?.map((data, index) => (
+              {data?.orders?.map((data, index) => (
                 <tr key={index} className="border-t block md:table-row">
                   <td className="p-2 py-4 block md:table-cell">{index + 1}</td>
                   <td className="p-2 block md:table-cell">
-                    {data.districtName}
+                    {data.shippingAddress?.firstName}
                   </td>
                   <td className="p-2 block md:table-cell truncate">
-                    {data.treeName}
+                    {data.shippingAddress?.district}
                   </td>
-                  <td className="p-2 block md:table-cell">{data.memberId}</td>
                   <td className="p-2 block md:table-cell truncate">
-                    {data.name}
+                    {data.shippingAddress?.phoneNumber}
                   </td>
-                  <td className="p-2 block md:table-cell">{data.level}</td>
-                  <td className="p-2 block md:table-cell">{data.sponsorId}</td>
+                  {data.items?.map((itm) => (
+                    <td className="p-2 block md:table-cell truncate">
+                      {itm?.product?.productType}
+                    </td>
+                  ))}
                 </tr>
               ))}
             </tbody>
