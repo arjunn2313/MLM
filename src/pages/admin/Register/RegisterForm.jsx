@@ -12,7 +12,7 @@ import {
   useCheckPlacement,
   useCheckSponsor,
 } from "../../../hooks/useMember";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { fileToBase64 } from "../../../utils/fileUtils";
 
 export default function RegisterForm() {
@@ -24,6 +24,9 @@ export default function RegisterForm() {
     watch,
     reset,
   } = useForm();
+
+  const [searchParams] = useSearchParams();
+  const sponsorIdRef = searchParams.get("sponsorId");
 
   const navigate = useNavigate();
   const phoneNumber = watch("phoneNumber");
@@ -52,6 +55,10 @@ export default function RegisterForm() {
   useEffect(() => {
     if (joiningFeeData && joiningFeeData.joiningFee) {
       setValue("joiningFee", joiningFeeData.joiningFee);
+    }
+
+    if(sponsorIdRef){
+      setValue("placementId",sponsorIdRef)
     }
 
     if (placementData && placementData.nextPlacement) {
@@ -361,6 +368,7 @@ export default function RegisterForm() {
             label="Placement ID"
             placeholder="Enter Placement ID"
             name="placementId"
+            disabled={sponsorIdRef}
             isError={placementError}
             isLoading={placementLoading}
             onChange={(value) => setValue("placementId", value)}
