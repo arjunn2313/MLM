@@ -22,6 +22,26 @@ export default function CrackersDataUpload() {
 
   const productCode = watch("productCode");
 
+  const calculateDiscountedPrice = (price, discount) => {
+    return (price - (price * discount) / 100).toFixed(2);
+  };
+
+  const { mlmDiscount, referralDiscount, normalDiscount, price } = watch();
+
+  if (price === undefined || price === null || isNaN(price) || price <= 0) {
+    console.error("Price is not valid:", price);
+  }
+
+  const priceWithMLMDiscount = calculateDiscountedPrice(price, mlmDiscount);
+  const priceWithReferralDiscount = calculateDiscountedPrice(
+    price,
+    referralDiscount
+  );
+  const priceWithNormalDiscount = calculateDiscountedPrice(
+    price,
+    normalDiscount
+  );
+
   const { data, isLoading, error: productError } = useCheckProduct(productCode);
   const { mutate, isPending } = useUpdateProductInstance();
 
@@ -39,7 +59,7 @@ export default function CrackersDataUpload() {
       productCode: data.productCode,
       productCategory: data.productCategory,
       productName: data.productName,
-      category: "Crackers", // This is a static value
+      category: "Crackers",
       gst: data.gst,
       quantity: data.quantity,
       unit: data.unit,
@@ -48,9 +68,9 @@ export default function CrackersDataUpload() {
       mlmDiscount: data.mlmDiscount,
       referralDiscount: data.referralDiscount,
       normalDiscount: data.normalDiscount,
-      // mlmPrice: mlmPrice,
-      // referralPrice: referralPrice,
-      // normalPrice: normalPrice,
+      mlmPrice: parseInt(priceWithMLMDiscount),
+      referralPrice: parseInt(priceWithReferralDiscount),
+      normalPrice: parseInt(priceWithNormalDiscount),
     };
 
     Object.entries(fields).forEach(([key, value]) => {
@@ -199,6 +219,36 @@ export default function CrackersDataUpload() {
             error={errors.photo}
             multiple={true}
           />
+        </div>
+
+        <div className="flex justify-between items-center mt-5">
+          <div className="flex items-center gap-3">
+            <label className="block text-sm font-medium   mr-2">
+              Price After MLM Discount
+            </label>
+
+            <span className="text-green-500 font-semibold">
+              {priceWithMLMDiscount} Rs
+            </span>
+          </div>
+          <div className="flex items-center gap-3">
+            <label className="block text-sm font-medium    mr-2">
+              Price After Refferal Discount
+            </label>
+
+            <span className="text-green-500 font-semibold">
+              {priceWithReferralDiscount} Rs
+            </span>
+          </div>
+          <div className="flex items-center gap-3">
+            <label className="block text-sm font-medium   mr-2">
+              Price After Normal Discount
+            </label>
+
+            <span className="text-green-500 font-semibold">
+              {priceWithNormalDiscount} Rs
+            </span>
+          </div>
         </div>
 
         <div className="flex justify-end gap-5 mt-5 p-6">

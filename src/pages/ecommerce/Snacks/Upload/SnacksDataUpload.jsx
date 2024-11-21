@@ -64,9 +64,21 @@ export default function SnacksDataUpload() {
         formData.append(`weight[${index}][value]`, weight);
         formData.append(`weight[${index}][unit]`, unit);
         formData.append(`weight[${index}][price]`, price);
+        formData.append(`weight[${index}][mlmPrice]`, parseInt(discountDetails[index].mlmDiscountedPrice));
+        formData.append(`weight[${index}][normalPrice]`, parseInt(discountDetails[index].normalDiscountedPrice));
+        formData.append(`weight[${index}][referralPrice]`, parseInt(discountDetails[index].referralDiscountedPrice));
       });
+      console.log(data);
 
-      data.photo?.forEach((file) => formData.append("productImage", file));
+      if (data.photo) {
+        Array.from(data.photo).forEach((file) => formData.append("productImage", file));
+      }
+    
+      
+ 
+      // for (let [key, value] of formData.entries()) {
+      //   console.log(`${key}:`, value);
+      // }
 
       mutate({formData,productCode})
     } catch (error) {
@@ -99,6 +111,9 @@ export default function SnacksDataUpload() {
     };
   });
 
+
+  
+  
 
 
 
