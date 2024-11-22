@@ -115,6 +115,7 @@ export default function SnacksNewStock() {
             placeholder="Enter Quantity"
             register={register("totalQuantity", {
               required: "quantity  is required",
+              valueAsNumber: true,
             })}
             error={errors.totalQuantity}
           />

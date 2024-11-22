@@ -1,4 +1,4 @@
-import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, createHashRouter, Outlet, RouterProvider } from "react-router-dom";
 import Layout from "./layouts/Management/Layout";
 import { Toaster } from "react-hot-toast";
 import AdminRoutes from "./routes/AdminRoute";
@@ -7,7 +7,7 @@ import AdminLogin from "./pages/admin/Auth/AdminLogin";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 import PublicRoute from "./components/ProtectedRoute/PublicRoutes";
 
-const router = createBrowserRouter([
+const router = createHashRouter([
   {
     path: "/",
     element: (

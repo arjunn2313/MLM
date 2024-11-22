@@ -118,6 +118,7 @@ export default function CrackersNewStock() {
                 placeholder="Enter quantity"
                 {...register("totalQuantity", {
                   required: "Quantity is required",
+                  valueAsNumber: true,
                 })}
               />
               <select
@@ -130,7 +131,7 @@ export default function CrackersNewStock() {
                 <option value="box">Box</option>
               </select>
             </div>
-         
+
             {errors.totalQuantity && (
               <p className="text-red-500 text-sm">
                 {errors.totalQuantity.message}

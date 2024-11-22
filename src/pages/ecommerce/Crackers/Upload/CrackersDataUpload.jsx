@@ -77,13 +77,14 @@ export default function CrackersDataUpload() {
       formData.append(key, value);
     });
 
-    // Append images if available
-    if (data.photo && Array.isArray(data.photo)) {
-      data.photo.forEach((file) => formData.append("productImage", file));
-    }
+    formData.append("productImage", data.photo);
 
-    // Pass formData and productCode to mutate
-    mutate({ formData, productCode: data.productCode });
+    mutate(
+      { formData, productCode: data.productCode },
+      {
+        onSuccess: () => reset(),
+      }
+    );
   };
 
   return (
@@ -131,6 +132,7 @@ export default function CrackersDataUpload() {
             placeholder="Enter gst"
             register={register("gst", {
               required: "GST is required",
+              valueAsNumber: true,
             })}
             error={errors.gst}
           />
@@ -146,6 +148,7 @@ export default function CrackersDataUpload() {
                 placeholder="Enter quantity"
                 {...register("quantity", {
                   required: "Quantity is required",
+                  valueAsNumber: true,
                 })}
               />
               <select
@@ -170,6 +173,7 @@ export default function CrackersDataUpload() {
             placeholder="Enter pieces"
             register={register("pieces", {
               required: "pieces is required",
+              valueAsNumber: true,
             })}
             error={errors.pieces}
           />
@@ -180,6 +184,7 @@ export default function CrackersDataUpload() {
             placeholder="Enter price"
             register={register("price", {
               required: "price is required",
+              valueAsNumber: true,
             })}
             error={errors.price}
           />
@@ -190,6 +195,7 @@ export default function CrackersDataUpload() {
             placeholder="Enter mlm discount"
             register={register("mlmDiscount", {
               required: "mlm discount is required",
+              valueAsNumber: true,
             })}
             error={errors.mlmDiscount}
           />
@@ -200,6 +206,7 @@ export default function CrackersDataUpload() {
             placeholder="Enter referral discount"
             register={register("referralDiscount", {
               required: "referal discount is required",
+              valueAsNumber: true,
             })}
             error={errors.referralDiscount}
           />
@@ -209,6 +216,7 @@ export default function CrackersDataUpload() {
             placeholder="Enter gst"
             register={register("normalDiscount", {
               required: "Normal discount is required",
+              valueAsNumber: true,
             })}
             error={errors.normalDiscount}
           />

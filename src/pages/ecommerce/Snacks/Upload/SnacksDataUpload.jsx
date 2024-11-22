@@ -80,7 +80,9 @@ export default function SnacksDataUpload() {
       //   console.log(`${key}:`, value);
       // }
 
-      mutate({formData,productCode})
+      mutate({formData,productCode},{
+        onSuccess : () =>reset()
+      })
     } catch (error) {
       console.log(error);
     }
@@ -163,6 +165,7 @@ export default function SnacksDataUpload() {
             placeholder="Enter gst"
             register={register("gst", {
               required: "GST is required",
+              valueAsNumber: true,
             })}
             error={errors.gst}
           />
@@ -173,6 +176,7 @@ export default function SnacksDataUpload() {
             placeholder="Enter mlm discount"
             register={register("mlmDiscount", {
               required: "mlm discount is required",
+              valueAsNumber: true,
             })}
             error={errors.mlmDiscount}
           />
@@ -183,6 +187,7 @@ export default function SnacksDataUpload() {
             placeholder="Enter referral discount"
             register={register("referralDiscount", {
               required: "referal discount is required",
+              valueAsNumber: true,
             })}
             error={errors.referralDiscount}
           />
@@ -193,6 +198,7 @@ export default function SnacksDataUpload() {
             placeholder="Enter gst"
             register={register("normalDiscount", {
               required: "Normal discount is required",
+              valueAsNumber: true,
             })}
             error={errors.normalDiscount}
           />
@@ -232,6 +238,7 @@ export default function SnacksDataUpload() {
                   placeholder="Enter weight"
                   {...register(`weights.${index}.weight`, {
                     required: "Weight is required",
+                    valueAsNumber: true,
                   })}
                 />
                 <select
@@ -250,6 +257,7 @@ export default function SnacksDataUpload() {
                 placeholder="Enter price"
                 register={register(`weights.${index}.price`, {
                   required: "Price is required",
+                  valueAsNumber: true,
                 })}
                 error={errors.weights?.[index]?.price}
               />
