@@ -3,7 +3,7 @@ const Product = require("../../models/Product");
 const Cart = require("../../models/Cart");
 
 // ADD TO WISHLIST
-const addToWishlist = async (req, res) => {
+exports.addToWishlist = async (req, res) => {
   try {
     const { productId } = req.body;
     const { userId } = req.user;
@@ -36,7 +36,7 @@ const addToWishlist = async (req, res) => {
   }
 };
 // get all items
-const getAllWishlistItems = async (req, res) => {
+exports.getAllWishlistItems = async (req, res) => {
   try {
     const { userId } = req.user;
 
@@ -55,7 +55,7 @@ const getAllWishlistItems = async (req, res) => {
   }
 };
 // delete
-const removeFromWishlist = async (req, res) => {
+exports.removeFromWishlist = async (req, res) => {
   try {
     const { productId } = req.body;
     const { userId } = req.user;
@@ -82,8 +82,8 @@ const removeFromWishlist = async (req, res) => {
   }
 };
 
-// ffffff
-const removeFromCartAndAddToWishlist = async (req, res) => {
+// REMOVE FROM CART AND ADD TO WISHLIST
+exports.removeFromCartAndAddToWishlist = async (req, res) => {
   try {
     const { productId } = req.body;
     const { userId } = req.user;
@@ -95,7 +95,7 @@ const removeFromCartAndAddToWishlist = async (req, res) => {
     }
 
     // Remove from Cart
-    let cart = await Cart.findOne({ user: userId });
+    let cart = await Cart.findOne({ userId });
     if (!cart) {
       return res.status(404).json({ error: "Cart not found" });
     }
@@ -137,11 +137,4 @@ const removeFromCartAndAddToWishlist = async (req, res) => {
     console.error(error);
     res.status(500).json({ error: "Internal server error" });
   }
-};
-
-module.exports = {
-  addToWishlist,
-  removeFromWishlist,
-  getAllWishlistItems,
-  removeFromCartAndAddToWishlist,
 };

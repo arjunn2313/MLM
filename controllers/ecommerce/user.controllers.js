@@ -103,7 +103,40 @@ exports.verifyOtp = async (req, res, next) => {
       ? `${user.mlmId} Congratulations! You are now an official MLM Agent.`
       : MESSAGES.OTP.VERIFIED;
 
-    res.status(STATUS_CODES.CREATED).json({ message: responseMessage});
+    res.status(STATUS_CODES.CREATED).json({ message: responseMessage });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// RESEND OTP
+exports.resendOtp = async (req, res, next) => {
+  const { phoneNumber } = req.body;
+  try {
+    const user = await User.findOne({ phoneNumber });
+
+    if (!user) {
+      return res
+        .status(STATUS_CODES.NOT_FOUND)
+        .json({ message: MESSAGES.USER.NOT_FOUND });
+    }
+
+    if (user.isVerified) {
+      return res
+        .status(STATUS_CODES.BAD_REQUEST)
+        .json({ message: MESSAGES.USER.ALREADY_VERIFIED });
+    }
+
+    const otp = await generateOtp();
+
+    user.otp = otp;
+    user.otpExpires = Date.now() + 15 * 60 * 1000;
+
+    await user.save();
+
+    res
+      .status(STATUS_CODES.SUCCESS)
+      .json({ message: MESSAGES.OTP.SENT, otp: otp });
   } catch (error) {
     next(error);
   }
@@ -177,7 +210,7 @@ exports.validateAndLogin = async (req, res, next) => {
     const user = await User.findOne({
       phoneNumber,
       otp,
-      otpExpiry: { $gt: Date.now() },
+      otpExpires: { $gt: Date.now() },
       isVerified: true,
     });
 
@@ -188,6 +221,31 @@ exports.validateAndLogin = async (req, res, next) => {
     const accessToken = await generateAccessToken(user);
 
     res.status(200).json({ accessToken });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// RESEND OTP FOR LOGIN
+exports.resendLoginOtp = async (req, res, next) => {
+  const { phoneNumber } = req.body;
+  try {
+    const user = await User.findOne({ phoneNumber, isVerified: true });
+
+    if (!user) {
+      return next(createError(STATUS_CODES.NOT_FOUND, MESSAGES.USER.NOT_FOUND));
+    }
+
+    const otp = await generateOtp();
+
+    user.otp = otp;
+    user.otpExpires = Date.now() + 30 * 60 * 1000;
+
+    await user.save();
+
+    res
+      .status(STATUS_CODES.SUCCESS)
+      .json({ message: MESSAGES.OTP.SENT, otp: otp });
   } catch (error) {
     next(error);
   }

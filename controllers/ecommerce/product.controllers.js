@@ -19,6 +19,7 @@ exports.getAllProducts = async (req, res) => {
     } = req.query;
 
     const token = req.cookies.token;
+
     let user = null;
     let wishlistProductIds = [];
 
@@ -27,10 +28,10 @@ exports.getAllProducts = async (req, res) => {
 
       if (user) {
         const wishlist = await Wishlist.findOne({ userId: user._id }).select(
-          "products"
+          "items"
         );
-        wishlistProductIds = wishlist
-          ? wishlist.products.map((id) => id.toString())
+        wishlistProductIds = wishlist?.items
+          ? wishlist.items.map((item) => item.productId.toString())
           : [];
       }
     }
@@ -90,7 +91,6 @@ exports.getAllProducts = async (req, res) => {
         ? wishlistProductIds.includes(product._id.toString())
         : false,
     }));
-
     const total = await Product.countDocuments(filters);
 
     res.status(200).json({

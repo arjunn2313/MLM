@@ -6,10 +6,12 @@ const { authenticateToken } = require("../../utils/jwt");
 // CREATE NEW LOGIN ACCOUNT
 router.post("/register-request", UserController.registerUser);
 router.post("/verify-otp", UserController.verifyOtp);
+router.post("/resend-otp", UserController.resendOtp);
 router.post("/login", UserController.loginReqByPassword);
 // LOGIN USING OTP
 router.post("/req-login-otp", UserController.logReqByOtp);
 router.post("/login-by-otp", UserController.validateAndLogin);
+router.post("/resend-login-otp", UserController.resendLoginOtp);
 // FORGOT PASSWORD AND RESET
 router.post("/forget-password", UserController.forgotPassword);
 router.post("/reset-password", UserController.resetPassword);

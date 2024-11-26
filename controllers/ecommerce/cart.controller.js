@@ -97,7 +97,7 @@ exports.getAllCartItems = async (req, res, next) => {
   const { userId } = req.user;
 
   try {
-    const cart = await Cart.findOne({ userId, status: "active" }) 
+    const cart = await Cart.findOne({ userId, status: "active" });
 
     if (!cart) {
       return next(createError(STATUS_CODES.NOT_FOUND, "CART NOT FOUND"));
@@ -244,7 +244,6 @@ exports.applyCoupon = async (req, res, next) => {
     next(err);
   }
 };
-
 // REMOVE COUPON
 exports.removeCoupon = async (req, res, next) => {
   const { userId } = req.user;

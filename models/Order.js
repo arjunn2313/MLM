@@ -5,7 +5,6 @@ const orderSchema = new mongoose.Schema(
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      // required: true,
     },
     orderId: {
       type: String,
@@ -14,16 +13,29 @@ const orderSchema = new mongoose.Schema(
     },
     items: [
       {
-        product: {
+        productId: {
           type: mongoose.Schema.Types.ObjectId,
           ref: "Product",
+          required: true,
+        },
+        variantId: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Variant",
+        },
+        variantSku: {
+          type: String,
           required: true,
         },
         quantity: {
           type: Number,
           required: true,
+          min: 1,
         },
         price: {
+          type: Number,
+          required: true,
+        },
+        totalPrice: {
           type: Number,
           required: true,
         },
@@ -32,7 +44,19 @@ const orderSchema = new mongoose.Schema(
     shippingAddress: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Address",
-      // required: true,
+    },
+    guestInfo: {
+      name: { type: String },
+      email: { type: String },
+      phone: { type: String },
+      address: {
+        line1: { type: String },
+        line2: { type: String },
+        city: { type: String },
+        state: { type: String },
+        postalCode: { type: String },
+        country: { type: String },
+      },
     },
     paymentMethod: {
       type: String,
@@ -46,12 +70,12 @@ const orderSchema = new mongoose.Schema(
     },
     orderStatus: {
       type: String,
-      enum: ["Pending", "Completed", "Failed"],
+      enum: ["Pending", "Dispatched", "Delivered", "Cancelled"],
       default: "Pending",
     },
     paymentDetails: {
-      transactionId: String,
-      paymentDate: Date,
+      transactionId: { type: String },
+      paymentDate: { type: Date },
     },
     totalAmount: {
       type: Number,
@@ -71,11 +95,6 @@ const orderSchema = new mongoose.Schema(
     },
     couponCode: {
       type: String,
-    },
-    status: {
-      type: String,
-      enum: ["Pending", "Dispatched", "Delivered", "Cancelled"],
-      default: "Pending",
     },
     isPaid: {
       type: Boolean,
@@ -106,5 +125,29 @@ const orderSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+ 
+orderSchema.pre("validate", function (next) {
+  if (!this.user && !this.guestInfo) {
+    return next(new Error("Either user or guestInfo must be provided."));
+  }
+  next();
+});
+
+ 
+orderSchema.pre("validate", function (next) {
+  if (
+    this.paymentStatus === "Completed" &&
+    (!this.paymentDetails || !this.paymentDetails.transactionId)
+  ) {
+    return next(new Error("Transaction ID is required for completed payments."));
+  }
+  next();
+});
+
+ 
+orderSchema.index({ orderId: 1 });
+orderSchema.index({ user: 1 });
+
 const Order = mongoose.model("Order", orderSchema);
+
 module.exports = Order;
