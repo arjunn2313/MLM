@@ -40,4 +40,8 @@ const calculateDiscountPrice = (product, isMlmAgent, category) => {
   return product.price;
 };
 
-module.exports = { getUserFromToken, calculateDiscountPrice };
+const generateSku = (productCode, variantType, variantValue) => {
+  return `${productCode}-${variantType}-${variantValue}`.toUpperCase();
+};
+
+module.exports = { getUserFromToken, calculateDiscountPrice,generateSku };

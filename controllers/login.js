@@ -70,7 +70,6 @@ const createAccount = async (req, res) => {
     });
 
     if (existingUser) {
-       
       const otp = otpGenerator.generate(6, {
         upperCaseAlphabets: false,
         specialChars: false,

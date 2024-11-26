@@ -16,7 +16,7 @@ const variantSchema = new mongoose.Schema({
       sku: {
         type: String,
         required: true,
-        unique: true,
+        // unique: true,
       },
       value: {
         type: Number,
@@ -25,6 +25,9 @@ const variantSchema = new mongoose.Schema({
       unit: {
         type: String,
         required: true,
+      },
+      pieces:{
+        type: String,
       },
       price: {
         type: Number,
@@ -39,6 +42,16 @@ const variantSchema = new mongoose.Schema({
       normalPrice: {
         type: Number,
       },
+      mlmDiscount: {
+        type: Number,
+      },
+      referralDiscount: {
+        type: Number,
+      },
+      normalDiscount: {
+        type: Number,
+      },
+      
     },
   ],
   totalQuantity: {

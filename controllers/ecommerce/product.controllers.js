@@ -1,147 +1,172 @@
+const { getUserFromToken } = require("../../services/productService");
 const Product = require("../../models/Product");
 const Wishlist = require("../../models/Wishlist");
-const {
-  getUserFromToken,
-  calculateDiscountPrice,
-  buildQuery,
-  getWishlistItems,
-  calculateWeights,
-} = require("../../services/productService");
 
-// GET ALL
-exports.getAllProducts = async (req, res,next) => {
+// GET ALL PRODUCTS
+exports.getAllProducts = async (req, res) => {
   try {
+    const {
+      page = 1,
+      limit = 10,
+      minPrice,
+      maxPrice,
+      search,
+      rating,
+      category,
+      productCategory,
+      sortBy = "createdAt",
+      order = "desc",
+    } = req.query;
+
     const token = req.cookies.token;
-    const user = await getUserFromToken(token);
+    let user = null;
+    let wishlistProductIds = [];
 
-    const isMlmAgent = user?.isMlmAgent || false;
+    if (token) {
+      user = await getUserFromToken(token);
 
-    const { page = 1, limit = 10, ...queryParams } = req.query;
+      if (user) {
+        const wishlist = await Wishlist.findOne({ userId: user._id }).select(
+          "products"
+        );
+        wishlistProductIds = wishlist
+          ? wishlist.products.map((id) => id.toString())
+          : [];
+      }
+    }
 
-    const query = buildQuery(queryParams);
+    const filters = {};
 
-    const products = await Product.find(query)
-      .select(
-        "productName rating price mlmPrice normalPrice mlmDiscount normalDiscount category weight _id productCode"
-      )
-      .limit(limit * 1)
-      .skip((page - 1) * limit)
-      .lean();
+    if (search) {
+      filters.productName = { $regex: search, $options: "i" };
+    }
 
-    const count = await Product.countDocuments(query);
+    if (rating) {
+      filters.averageRating = { $gte: Number(rating) };
+    }
 
-    const wishlistItems = user ? await getWishlistItems(user._id) : [];
+    if (category) {
+      filters.category = category;
+    }
 
-    const modifiedProducts = products.map((product) => {
-      const pricingDetails = calculateWeights(
-        product.weight,
-        product,
-        isMlmAgent
-      );
+    if (productCategory) {
+      filters.productCategory = productCategory;
+    }
 
-      return {
-        productName: product.productName,
-        rating: product.rating || 0,
-        productCode:product.productCode,
-        _id:product._id,
+    const options = {
+      skip: (Number(page) - 1) * Number(limit),
+      limit: Number(limit),
+      sort: { [sortBy]: order === "asc" ? 1 : -1 },
+    };
 
-        ...(product.category === "Crackers"
-          ? {
-              actualPrice: pricingDetails.actualPrice,
-              discountPrice: pricingDetails.discountPrice,
-            }
-          : {
-              weights: pricingDetails,
-            }),
-        isInWishlist: wishlistItems.includes(product._id.toString()),
-      };
+    const products = await Product.find(filters)
+      .populate({
+        path: "varient",
+        select: `variantType variants.value variants.unit variants.price ${
+          user?.isMlmAgent ? "variants.mlmPrice" : "variants.normalPrice"
+        }`,
+      })
+      .skip(options.skip)
+      .limit(options.limit)
+      .sort(options.sort);
+
+    const filteredProducts = products.filter((product) => {
+      if (minPrice || maxPrice) {
+        const priceMatches = product.varient.variants.some((variant) => {
+          const price = variant.price;
+          return (
+            (minPrice ? price >= minPrice : true) &&
+            (maxPrice ? price <= maxPrice : true)
+          );
+        });
+        return priceMatches;
+      }
+      return true;
     });
 
-    res.json({
-      products: modifiedProducts,
-      totalPages: Math.ceil(count / limit),
-      currentPage: parseInt(page),
+    const transformedProducts = filteredProducts.map((product) => ({
+      ...product._doc,
+      isInWishlist: user
+        ? wishlistProductIds.includes(product._id.toString())
+        : false,
+    }));
+
+    const total = await Product.countDocuments(filters);
+
+    res.status(200).json({
+      success: true,
+      total,
+      page: Number(page),
+      limit: Number(limit),
+      products: transformedProducts,
     });
   } catch (error) {
-    next(error)
+    res.status(500).json({
+      success: false,
+      message: "An error occurred while fetching products.",
+      error: error.message,
+    });
   }
 };
 
 // GET SINGLE PRODUCT
 
-exports.getProductByIdOrCode = async (req, res) => {
+exports.getSingleProduct = async (req, res) => {
   try {
-    const { id, productCode } = req.params;
+    const { id } = req.params;
     const token = req.cookies.token;
+    let user = null;
+    let wishlistProductIds = [];
 
-    let isMlmAgent = false;
-    let isInWishlist = false;
+    if (!id) {
+      return res.status(400).json({
+        success: false,
+        message: "Product ID is required.",
+      });
+    }
 
-    // Fetch user and determine if they are an MLM agent
-    const user = await getUserFromToken(token);
-    if (user) {
-      isMlmAgent = user.isMlmAgent;
+    if (token) {
+      user = await getUserFromToken(token);
 
-      // Check if the product is in the user's wishlist
-      const wishlist = await Wishlist.findOne({ userId: user._id }).lean();
-      if (wishlist) {
-        const wishlistItems = wishlist.items.map((item) => item.productId.toString());
-        if (id) isInWishlist = wishlistItems.includes(id);
-        if (productCode) {
-          const product = await Product.findOne({ productCode }).select('_id').lean();
-          if (product) isInWishlist = wishlistItems.includes(product._id.toString());
-        }
+      if (user) {
+        const wishlist = await Wishlist.findOne({ userId: user._id }).select(
+          "products"
+        );
+        wishlistProductIds = wishlist
+          ? wishlist.products.map((id) => id.toString())
+          : [];
       }
     }
 
-    // Build query based on provided parameters
-    const query = id ? { _id: id } : productCode ? { productCode } : null;
-    if (!query) {
-      return res.status(400).json({ message: "Product ID or Product Code is required" });
-    }
+    const product = await Product.findById(id).populate({
+      path: "varient",
+      select: `variantType variants.value variants.unit variants.price ${
+        user?.isMlmAgent ? "variants.mlmPrice" : "variants.normalPrice"
+      }`,
+    });
 
-    // Find the product
-    const product = await Product.findOne(query).lean() 
     if (!product) {
-      return res.status(404).json({ message: "Product not found" });
+      return res.status(404).json({
+        success: false,
+        message: "Product not found.",
+      });
     }
 
-    // Calculate prices based on category and agent type
-    let actualPrice, discountPrice;
-    if (product.category === "Snacks") {
-      // Snacks-specific pricing
-      const weight = Array.isArray(product.weight) && product.weight.length > 0 ? product.weight[0] : {};
-      actualPrice = parseFloat(weight.price || 0);
-      discountPrice = isMlmAgent
-        ? parseFloat(weight.mlmPrice || actualPrice)
-        : parseFloat(weight.normalPrice || actualPrice);
-    } else if (product.category === "Crackers") {
-      // Crackers-specific pricing
-      actualPrice = parseFloat(product.price);
-      discountPrice = isMlmAgent
-        ? parseFloat(product.mlmPrice || actualPrice)
-        : parseFloat(product.normalPrice || actualPrice);
-    } else {
-      // Default pricing for other categories
-      actualPrice = parseFloat(product.price);
-      discountPrice =
-        actualPrice - (isMlmAgent ? parseFloat(product.mlmDiscount || 0) : parseFloat(product.normalDiscount || 0));
-    }
+    const transformedProduct = {
+      ...product._doc,
+      isInWishlist: user
+        ? wishlistProductIds.includes(product._id.toString())
+        : false,
+    };
 
-    // Return the response
     res.status(200).json({
-      message: "Product fetched successfully",
-      product: {
-        ...product,
-        actualPrice: actualPrice.toFixed(2),
-        discountPrice: discountPrice.toFixed(2),
-        isInWishlist,
-      },
+      success: true,
+      product: transformedProduct,
     });
   } catch (error) {
-    console.error("Error fetching product:", error);
     res.status(500).json({
-      message: "Error while fetching product",
+      success: false,
+      message: "An error occurred while fetching product details.",
       error: error.message,
     });
   }
@@ -152,7 +177,6 @@ exports.getProductCategories = async (req, res) => {
   try {
     const { category } = req.query;
 
-    // Allowed categories to filter by
     const allowedCategories = ["Crackers", "Snacks"];
     if (category && !allowedCategories.includes(category)) {
       return res.status(400).json({
@@ -160,13 +184,11 @@ exports.getProductCategories = async (req, res) => {
       });
     }
 
-    // Add the active condition and optional category filter
     const queryCondition = { isActive: true };
     if (category) {
       queryCondition.category = category;
     }
 
-    // Fetch distinct categories for active products
     const categories = await Product.distinct(
       "productCategory",
       queryCondition
