@@ -45,6 +45,7 @@ const orderSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Address",
     },
+    guestId: { type: String },
     guestInfo: {
       name: { type: String },
       email: { type: String },
@@ -125,7 +126,6 @@ const orderSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
- 
 orderSchema.pre("validate", function (next) {
   if (!this.user && !this.guestInfo) {
     return next(new Error("Either user or guestInfo must be provided."));
@@ -133,18 +133,18 @@ orderSchema.pre("validate", function (next) {
   next();
 });
 
- 
 orderSchema.pre("validate", function (next) {
   if (
     this.paymentStatus === "Completed" &&
     (!this.paymentDetails || !this.paymentDetails.transactionId)
   ) {
-    return next(new Error("Transaction ID is required for completed payments."));
+    return next(
+      new Error("Transaction ID is required for completed payments.")
+    );
   }
   next();
 });
 
- 
 orderSchema.index({ orderId: 1 });
 orderSchema.index({ user: 1 });
 

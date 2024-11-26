@@ -99,11 +99,11 @@ exports.verifyOtp = async (req, res, next) => {
 
     await user.save();
 
-    const responseMessage = user.isMlmAgent
-      ? `${user.mlmId} Congratulations! You are now an official MLM Agent.`
-      : MESSAGES.OTP.VERIFIED;
+    const memberId = user.isMlmAgent && user.mlmId;
 
-    res.status(STATUS_CODES.CREATED).json({ message: responseMessage });
+    res
+      .status(STATUS_CODES.CREATED)
+      .json({ message: MESSAGES.OTP.VERIFIED, memberId: memberId });
   } catch (error) {
     next(error);
   }
