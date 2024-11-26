@@ -71,7 +71,7 @@ const orderSchema = new mongoose.Schema(
     },
     orderStatus: {
       type: String,
-      enum: ["Pending", "Dispatched", "Delivered", "Cancelled"],
+      enum: ["Pending","Confirmed", "Dispatched", "Delivered", "Cancelled"],
       default: "Pending",
     },
     paymentDetails: {
@@ -84,7 +84,7 @@ const orderSchema = new mongoose.Schema(
     },
     actualAmount: {
       type: Number,
-      required: true,
+      // required: true,
     },
     taxAmount: {
       type: Number,
@@ -126,10 +126,24 @@ const orderSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-orderSchema.pre("validate", function (next) {
-  if (!this.user && !this.guestInfo) {
-    return next(new Error("Either user or guestInfo must be provided."));
+// orderSchema.pre("validate", function (next) {
+//   if (!this.user && !this.guestInfo) {
+//     return next(new Error("Either user or guestInfo must be provided."));
+//   }
+//   next();
+// });
+
+orderSchema.pre("save", function (next) {
+  if (this.items && this.items.length > 0) {
+    this.totalAmount = this.items.reduce((sum, item) => {
+      return sum + item.totalPrice;
+    }, 0);
+
+    this.totalAmount = this.totalAmount + this.taxAmount - this.discountAmount;
+  } else {
+    this.totalAmount = 0;
   }
+
   next();
 });
 
