@@ -503,37 +503,58 @@ const updateProductImage = async (req, res) => {
   }
 };
 
-
 // extrxt category and quantity
 const getProductCategoriesWithQuantity = async (req, res) => {
   try {
-    const products = await Product.aggregate([
-      { $match: { category: "Snacks" } }, // Filter for category "Snacks"
-      { 
-        $group: {
-          _id: "$productCategory", // Group by productCategory
-          totalQuantity: { $sum: { $toInt: "$totalQuantity" } } // Sum totalQuantity as integer
-        }
+    const categoriesWithQuantities = await Product.aggregate([
+      { $match: { category: "Snacks" } },
+
+      {
+        $lookup: {
+          from: "variants",
+          localField: "_id",
+          foreignField: "productId",
+          as: "variants",
+        },
       },
+
+      { $unwind: "$variants" },
+
+      {
+        $group: {
+          _id: "$productCategory",
+          totalQuantity: { $sum: "$variants.totalQuantity" },
+        },
+      },
+
       {
         $group: {
           _id: null,
-          categories: { $push: { productCategory: "$_id", totalQuantity: "$totalQuantity" } }, // Push each category with total quantity
-          combinedTotalQuantity: { $sum: "$totalQuantity" } // Sum up all quantities
-        }
+          categories: {
+            $push: {
+              productCategory: "$_id",
+              totalQuantity: "$totalQuantity",
+            },
+          },
+          combinedTotalQuantity: { $sum: "$totalQuantity" },
+        },
       },
+
       {
         $project: {
           _id: 0,
           categories: 1,
-          combinedTotalQuantity: 1
-        }
-      }
+          combinedTotalQuantity: 1,
+        },
+      },
     ]);
 
     res.status(200).json({
       success: true,
-      data: products[0] || { categories: [], combinedTotalQuantity: 0 }
+      data: categoriesWithQuantities[0] || {
+        categories: [],
+        combinedTotalQuantity: 0,
+      },
     });
   } catch (error) {
     console.error(error);
@@ -543,7 +564,6 @@ const getProductCategoriesWithQuantity = async (req, res) => {
     });
   }
 };
-
 
 module.exports = {
   createProduct,
@@ -556,5 +576,5 @@ module.exports = {
   updateProductImage,
   findNotActiveProduct,
   updateProductInstance,
-  getProductCategoriesWithQuantity
+  getProductCategoriesWithQuantity,
 };

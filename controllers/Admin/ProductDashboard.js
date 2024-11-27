@@ -2,12 +2,55 @@ const Order = require("../../models/Order");
 const Product = require("../../models/Product");
 const { getDateRange, formatSalesData } = require("../../services/filter");
 
+// const totalSales = async (req, res) => {
+//   try {
+//     const { category, interval } = req.query;
+
+//     if (!category || !interval) {
+//       return res.status(400).json({ error: "Category and interval are required" });
+//     }
+
+//     const { startDate, dateFormat, fullRange } = getDateRange(interval);
+
+//     const salesData = await Order.aggregate([
+//       {
+//         $match: {
+//           "items.product": {
+//             $in: await Product.find({ category }).distinct("_id"),
+//           },
+//           createdAt: { $gte: startDate },
+//         },
+//       },
+//       { $unwind: "$items" },
+//       {
+//         $group: {
+//           _id: { $dateToString: { format: dateFormat, date: "$createdAt" } },
+//           totalAmount: {
+//             $sum: { $multiply: ["$items.quantity", "$items.price"] },
+//           },
+//         },
+//       },
+//       { $sort: { _id: 1 } },
+//     ]);
+
+//     // Format the sales data, ensuring all weeks or months are included
+//     const formattedData = formatSalesData(salesData, interval, fullRange);
+
+//     res.json(formattedData);
+//   } catch (error) {
+//     console.error("Error fetching chart data:", error);
+//     res.status(500).json({ error: "Internal Server Error" });
+//   }
+// };
+
 const totalSales = async (req, res) => {
   try {
     const { category, interval } = req.query;
 
     if (!category || !interval) {
-      return res.status(400).json({ error: "Category and interval are required" });
+      return res
+        .status(400)
+        .json({ error: "Category and interval are required" });
     }
 
     const { startDate, dateFormat, fullRange } = getDateRange(interval);
@@ -15,7 +58,7 @@ const totalSales = async (req, res) => {
     const salesData = await Order.aggregate([
       {
         $match: {
-          "items.product": {
+          "items.productId": {
             $in: await Product.find({ category }).distinct("_id"),
           },
           createdAt: { $gte: startDate },
@@ -26,14 +69,15 @@ const totalSales = async (req, res) => {
         $group: {
           _id: { $dateToString: { format: dateFormat, date: "$createdAt" } },
           totalAmount: {
-            $sum: { $multiply: ["$items.quantity", "$items.price"] },
+            $sum: {
+              $multiply: ["$items.quantity", "$items.price"],
+            },
           },
         },
       },
       { $sort: { _id: 1 } },
     ]);
 
-    // Format the sales data, ensuring all weeks or months are included
     const formattedData = formatSalesData(salesData, interval, fullRange);
 
     res.json(formattedData);

@@ -1,4 +1,4 @@
-const { getAllOrders, getSingleOrder, dispatchOrder, getAllProductReview, approveOrRejectReview } = require("../../controllers/Admin/orders");
+const { getAllOrders, getSingleOrder, dispatchOrder, getAllProductReview, approveOrRejectReview } = require("../../controllers/Admin/orders.controller");
 
 const router = require("express").Router();
 

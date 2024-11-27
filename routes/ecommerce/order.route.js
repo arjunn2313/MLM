@@ -1,18 +1,4 @@
-const {
-  placeOrder,
-  getOrders,
-  postReview,
-  buyNow,
-  confirmPayment,
-  getBuynow,
-  procedToCheckout,
-  getCheckoutDetails,
-  updateShippingAddress,
-
-  applyCoupon,
-} = require("../../controllers/Ecommerce/Order");
-
-const router = require("express").Router();
+ const router = require("express").Router();
 const order = require("../../controllers/ecommerce/order.controllers")
 
 // // new apis

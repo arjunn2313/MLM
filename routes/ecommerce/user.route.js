@@ -9,6 +9,7 @@ router.post("/verify-otp", UserController.verifyOtp);
 router.post("/resend-otp", UserController.resendOtp);
 router.post("/login", UserController.loginReqByPassword);
 // LOGIN USING OTP
+router.post("/verify-mobile", UserController.checkPhoneNumberVerification);
 router.post("/req-login-otp", UserController.logReqByOtp);
 router.post("/login-by-otp", UserController.validateAndLogin);
 router.post("/resend-login-otp", UserController.resendLoginOtp);

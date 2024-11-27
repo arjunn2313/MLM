@@ -41,8 +41,8 @@ app.get("/", (req, res) => {
 
 app.use("/login", login);
 
-// app.use("/api/admin", authenticateToken, checkRole("admin"), adminRoute);
-app.use("/api/admin", adminRoute);
+app.use("/api/admin", authenticateToken, checkRole("admin"), adminRoute);
+// app.use("/api/admin", adminRoute);
 
 app.use("/api/agent", authenticateToken, checkRole("agent"), agentRoute);
 

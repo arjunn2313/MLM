@@ -138,16 +138,12 @@ exports.updateProductInstance = async (req, res) => {
 exports.getProductById = async (req, res) => {
   try {
     const { id } = req.params;
-    const product = await Product.findById(id);
+    const product = await Product.findById(id).populate("varient");
 
     if (!product) {
       return res.status(404).json("Product not found");
     }
-    const varient = await Variant.findOne({ productId: product._id });
-
-    if (!varient) {
-      return res.status(404).json("varient not found");
-    }
+ 
     res.status(200).json(product);
   } catch (error) {
     console.error(error);
@@ -202,7 +198,7 @@ exports.getAllProducts = async (req, res) => {
       category,
       search,
       status,
-      productCategory,
+      selectedCategory,
     } = req.query;
 
     let query = { isActive: true };
@@ -215,8 +211,8 @@ exports.getAllProducts = async (req, res) => {
       query.status = status;
     }
 
-    if (productCategory) {
-      query.productCategory = productCategory;
+    if (selectedCategory) {
+      query.productCategory = selectedCategory;
     }
 
     if (search) {
@@ -253,3 +249,91 @@ exports.getAllProducts = async (req, res) => {
     });
   }
 };
+
+// UPDATE STOCK
+exports.updateProductStock = async (req, res) => {
+  try {
+    const { productId } = req.params; 
+    const {
+      productCode,
+      category,
+      productName,
+      totalQuantity,
+      totalQuantityUnit,
+      productCategory,
+      variantType,
+    } = req.body;
+
+    // Check if the product exists
+    const product = await Product.findById(productId).populate("varient");
+    if (!product) {
+      return res.status(404).json({
+        success: false,
+        message: "Product not found",
+      });
+    }
+
+    // Update product details
+    if (productCode) product.productCode = productCode;
+    if (category) product.category = category;
+    if (productName) product.productName = productName;
+    if (productCategory) product.productCategory = productCategory;
+
+    await product.save();
+
+    // Update variant details
+    if (product.varient) {
+      const variant = await Variant.findById(product.varient);
+
+      if (variant) {
+        if (totalQuantity) variant.totalQuantity = totalQuantity;
+        if (totalQuantityUnit) variant.totalQuantityUnit = totalQuantityUnit;
+        if (variantType) variant.variantType = variantType;
+
+        await variant.save();
+      }
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Product and variant updated successfully",
+      product,
+    });
+  } catch (error) {
+    console.error("Error updating product:", error.message);
+    res.status(500).json({
+      success: false,
+      message: "Failed to update product",
+    });
+  }
+};
+
+// UPDATE STATUS
+exports.updateProductStatus = async (req, res) => {
+  try {
+    const { status } = req.body;
+    console.log(status);
+
+    if (!status || !["active", "inactive", "out of stock"].includes(status)) {
+      return res.status(400).json({ message: "Invalid status value" });
+    }
+    const product = await Product.findByIdAndUpdate(
+      req.params.id,
+      { status },
+      { new: true, runValidators: true }
+    );
+
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    res.status(200).json(product);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Error while upadting product status",
+      error: error.message,
+    });
+  }
+};
+

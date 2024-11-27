@@ -1,20 +1,32 @@
 const Order = require("../../models/Order");
 const Review = require("../../models/Review");
 
-// get all
+// GET ALL
+
 const getAllOrders = async (req, res) => {
   try {
-    const { page = 1, limit = 10, search = "", date, orderStatus, category } = req.query;
+    const {
+      page = 1,
+      limit = 10,
+      search = "",
+      date,
+      orderStatus,
+      category,
+      paymentStatus,
+      paymentMethod,
+      couponCode,
+    } = req.query;
 
     const skip = (page - 1) * limit;
 
-    // Construct basic search query
     const searchQuery = search
       ? {
           $or: [
             { orderId: { $regex: search, $options: "i" } },
             { "user.firstName": { $regex: search, $options: "i" } },
             { "user.lastName": { $regex: search, $options: "i" } },
+            { "guestInfo.name": { $regex: search, $options: "i" } },
+            { "guestInfo.email": { $regex: search, $options: "i" } },
           ],
         }
       : {};
@@ -30,30 +42,35 @@ const getAllOrders = async (req, res) => {
       };
     }
 
-    if (orderStatus) {
-      searchQuery.orderStatus = orderStatus;
-    }
+    if (orderStatus) searchQuery.orderStatus = orderStatus;
+    if (paymentStatus) searchQuery.paymentStatus = paymentStatus;
+    if (paymentMethod) searchQuery.paymentMethod = paymentMethod;
+    if (couponCode) searchQuery.couponCode = couponCode;
 
-    // Fetch orders with basic search query
     let orders = await Order.find(searchQuery)
       .populate("user", "firstName lastName")
-      .populate("items.product", "category") // Populate product to access category
+      .populate("items.productId", "category")
+      .populate("items.variantId", "variantSku")
       .populate("shippingAddress")
       .limit(parseInt(limit))
       .skip(parseInt(skip))
       .sort({ createdAt: -1 });
 
-    // If category is provided, filter orders by category in memory after populating products
     if (category) {
-      orders = orders.filter(order => 
-        order.items.some(item => item.product.category === category)
-      );
+      orders = orders
+        .map((order) => {
+          const filteredItems = order.items.filter(
+            (item) => item.productId.category === category
+          );
+          return filteredItems.length > 0
+            ? { ...order.toObject(), items: filteredItems }
+            : null;
+        })
+        .filter((order) => order !== null);
     }
 
-    // Get total order count with search filters applied
     const totalOrders = await Order.countDocuments(searchQuery);
 
-    // Respond with paginated order data
     res.status(200).json({
       orders,
       currentPage: parseInt(page),
@@ -66,76 +83,16 @@ const getAllOrders = async (req, res) => {
   }
 };
 
-
-
-// const getAllOrders = async (req, res) => {
-//   try {
-//     const { page = 1, limit = 10, search = "", date, orderStatus,category } = req.query;
-
-//     const skip = (page - 1) * limit;
-
-//     // Construct search query
-//     const searchQuery = search
-//       ? {
-//           $or: [
-//             { orderId: { $regex: search, $options: "i" } },
-//             { "user.firstName": { $regex: search, $options: "i" } },
-//             { "user.lastName": { $regex: search, $options: "i" } },
-//           ],
-//         }
-//       : {};
-
-//     if (date) {
-//       const startDate = new Date(date);
-//       const endDate = new Date(date);
-//       endDate.setUTCHours(23, 59, 59, 999);
-
-//       searchQuery.createdAt = {
-//         $gte: startDate,
-//         $lte: endDate,
-//       };
-//     }
-
-//     if (orderStatus) {
-//       searchQuery.orderStatus = orderStatus;
-//     }
-
-//     const orders = await Order.find(searchQuery)
-//       .populate("user", "firstName lastName")
-//       .populate("shippingAddress")
-//       .limit(parseInt(limit))
-//       .skip(parseInt(skip))
-//       .sort({ createdAt: -1 });
-
-//     // Get total order count with search and date filters applied
-//     const totalOrders = await Order.countDocuments(searchQuery);
-
-//     res.status(200).json({
-//       orders,
-//       currentPage: parseInt(page),
-//       totalPages: Math.ceil(totalOrders / limit),
-//       totalOrders,
-//     });
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ message: "Server error", error });
-//   }
-// };
-
- 
 // GET SINGLE ORDER
 const getSingleOrder = async (req, res) => {
   try {
     const { orderId } = req.params;
 
-    // Find the order by ID and populate the relevant fields
     const order = await Order.findById(orderId)
       .populate("user", "firstName lastName phoneNumber email")
       .populate("shippingAddress")
-      .populate(
-        "items.product",
-        "productName productCode category productCategory"
-      );
+      .populate("items.productId", "productName productCode category ")
+      .populate("items.variantId");
 
     if (!order) {
       return res.status(404).json({ message: "Order not found" });

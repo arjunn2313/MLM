@@ -142,6 +142,28 @@ exports.resendOtp = async (req, res, next) => {
   }
 };
 
+// CHECK PHONE NUMBER VERIFICATION
+exports.checkPhoneNumberVerification = async (req, res, next) => {
+  try {
+    const { phoneNumber } = req.body;
+
+    const user = await User.findOne({ phoneNumber, isVerified : true });
+
+    if (!user) {
+      return res
+        .status(STATUS_CODES.NOT_FOUND)
+        .json({ message: MESSAGES.USER.NOT_FOUND });
+    }
+
+    res.status(STATUS_CODES.SUCCESS).json({
+      message: "Verified",
+       phoneNumber,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 // LOGIN USING PASSWORD
 exports.loginReqByPassword = async (req, res, next) => {
   try {
