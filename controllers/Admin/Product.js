@@ -507,39 +507,45 @@ const updateProductImage = async (req, res) => {
 const getProductCategoriesWithQuantity = async (req, res) => {
   try {
     const categoriesWithQuantities = await Product.aggregate([
+      // Match products within the desired category
       { $match: { category: "Snacks" } },
 
+      // Lookup variants associated with each product
       {
         $lookup: {
-          from: "variants",
-          localField: "_id",
-          foreignField: "productId",
-          as: "variants",
+          from: "variants", // Collection name for Variant schema
+          localField: "_id", // Product ID in Product schema
+          foreignField: "productId", // Product reference in Variant schema
+          as: "variants", // Alias for the resulting array of variants
         },
       },
 
+      // Unwind the variants array to process each variant
       { $unwind: "$variants" },
 
+      // Group by productCategory and calculate total quantities
       {
         $group: {
-          _id: "$productCategory",
-          totalQuantity: { $sum: "$variants.totalQuantity" },
+          _id: "$productCategory", // Group by productCategory
+          totalQuantity: { $sum: "$variants.totalQuantity" }, // Sum totalQuantity from variants
         },
       },
 
+      // Combine all categories and total quantities into a single document
       {
         $group: {
-          _id: null,
+          _id: null, // Group everything into one document
           categories: {
             $push: {
               productCategory: "$_id",
               totalQuantity: "$totalQuantity",
             },
           },
-          combinedTotalQuantity: { $sum: "$totalQuantity" },
+          combinedTotalQuantity: { $sum: "$totalQuantity" }, // Sum totalQuantity across all categories
         },
       },
 
+      // Remove the `_id` field from the final result
       {
         $project: {
           _id: 0,
@@ -549,12 +555,10 @@ const getProductCategoriesWithQuantity = async (req, res) => {
       },
     ]);
 
+    // Return the aggregated data
     res.status(200).json({
       success: true,
-      data: categoriesWithQuantities[0] || {
-        categories: [],
-        combinedTotalQuantity: 0,
-      },
+      data: categoriesWithQuantities[0] || { categories: [], combinedTotalQuantity: 0 },
     });
   } catch (error) {
     console.error(error);
@@ -564,6 +568,7 @@ const getProductCategoriesWithQuantity = async (req, res) => {
     });
   }
 };
+
 
 module.exports = {
   createProduct,
