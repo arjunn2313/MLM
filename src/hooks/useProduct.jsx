@@ -133,20 +133,20 @@ export const useProductDashboard = () => {
 };
 
 // GET --- PRODUCTS SALES CHARTS
-export const useProductSales = () => {
+export const useProductSales = (category,interval) => {
   return useQuery({
-    queryKey: ["product-sales", ],
-    queryFn: () => fetchSalesReport(),
+    queryKey: ["product-sales",category,interval],
+    queryFn: () => fetchSalesReport(category,interval),
     keepPreviousData: true,
     refetchOnWindowFocus: false,
   });
 };
 
 // GET --- PRODUCTS SUB CATEGORY SALES CHARTS
-export const useSubProductSales = () => {
+export const useSubProductSales = (category,interval) => {
   return useQuery({
-    queryKey: ["product-sub-sales", ],
-    queryFn: () => fetchCategorySalesReport(),
+    queryKey: ["product-sub-sales",category,interval ],
+    queryFn: () => fetchCategorySalesReport(category,interval),
     keepPreviousData: true,
     refetchOnWindowFocus: false,
   });

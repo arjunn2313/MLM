@@ -13,9 +13,9 @@ const Sidebar = ({ items }) => {
   };
 
   return (
-    <div className="w-64 bg-white h-screen flex flex-col  shadow-lg">
+    <div className="w-64 bg-white h-screen flex flex-col shadow-lg">
       <div className="flex items-center mt-2">
-        <div className="bg-primary text-white px-10 py-1 my-2  text-2xl  text-center rounded-r-full  font-bold">
+        <div className="bg-primary text-white px-10 py-1 my-2 text-2xl text-center rounded-r-full font-bold">
           S I P
         </div>
       </div>
@@ -44,21 +44,19 @@ const Sidebar = ({ items }) => {
                   />
                 )}
               </NavLink>
-              {item.subHeading && 
-               <li className=" flex items-center text-orange-800 font-bold border-b-2 border-orange-800">
-               {item.subicon && <item.subicon className="mr-2" />}
-               <span>{item.subHeading}</span>
-               </li>
-}
-              {/* Check if the item has a submenu */}
+              {item.subHeading && (
+                <div className="flex items-center text-orange-800 font-bold border-b-2 border-orange-800">
+                  {item.subicon && <item.subicon className="mr-2" />}
+                  <span>{item.subHeading}</span>
+                </div>
+              )}
               {item.submenu && openSubmenu === index && (
                 <div className="ml-2 mt-2 flex flex-col space-y-3 text-[15px] relative">
                   <div className="absolute top-8 left-[13px] w-[2px] h-24 bg-gray-300"></div>
-
                   {item.submenu.map((subItem, subIndex) => (
                     <div
                       key={subIndex}
-                      className="relative flex items-center group cursor-pointer  "
+                      className="relative flex items-center group cursor-pointer"
                     >
                       <div className="absolute w-2 h-2 bg-[#345261] rounded-full left-[10px] group-hover:bg-[#345261]"></div>
                       <NavLink

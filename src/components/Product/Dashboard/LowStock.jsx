@@ -1,11 +1,9 @@
 import React from "react";
-
 import { useNavigate } from "react-router-dom";
-
 import Heading from "../../Headings/Headings";
-import TablePlaceholder from "../../loaders/TableSkelton";
 import { lowStock } from "../../../constatnts/TableHeadings";
 import { useFetchOrders } from "../../../hooks/useOrder";
+import LoadingBox from "../../Loaders/LoadingBox";
 
 export default function LowStock() {
   const navigate = useNavigate();
@@ -14,7 +12,7 @@ export default function LowStock() {
 
   const { data, isLoading } = useFetchOrders(category);
 
-  console.log(data);
+ 
 
   return (
     <div className="bg-white p-6 rounded-lg shadow-md border border-primary">
@@ -28,7 +26,7 @@ export default function LowStock() {
         </button>
       </div>
       {isLoading ? (
-        <TablePlaceholder />
+         <LoadingBox width="w-full" height="h-64" rounded="rounded-md" />
       ) : (
         <div className="overflow-x-auto min-h-80">
           <table className="min-w-full border-collapse block md:table">

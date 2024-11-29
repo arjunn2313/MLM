@@ -55,30 +55,63 @@ export default function CrackersDataUpload() {
   const onSubmit = (data) => {
     const formData = new FormData();
 
+    // Gather basic product fields
     const fields = {
       productCode: data.productCode,
       productCategory: data.productCategory,
       productName: data.productName,
       category: "Crackers",
       gst: data.gst,
-      quantity: data.quantity,
-      unit: data.unit,
-      pieces: data.pieces,
-      price: data.price,
-      mlmDiscount: data.mlmDiscount,
-      referralDiscount: data.referralDiscount,
-      normalDiscount: data.normalDiscount,
-      mlmPrice: parseInt(priceWithMLMDiscount),
-      referralPrice: parseInt(priceWithReferralDiscount),
-      normalPrice: parseInt(priceWithNormalDiscount),
+ 
     };
 
+    // Append basic product fields to formData
     Object.entries(fields).forEach(([key, value]) => {
       formData.append(key, value);
     });
 
-    formData.append("productImage", data.photo);
+    // Handling variants
+    if (data.varients) {
+      data.varients.forEach(({ value, unit, pieces }, index) => {
+        formData.append(`variants[${index}][value]`, value);
+        formData.append(`variants[${index}][unit]`, unit);
+        formData.append(`variants[${index}][pieces]`, pieces);
+        formData.append(`variants[${index}][price]`, data.price);
+        formData.append(
+          `variants[${index}][mlmPrice]`,
+          parseInt(priceWithMLMDiscount)
+        );
+        formData.append(
+          `variants[${index}][normalPrice]`,
+          parseInt(priceWithNormalDiscount)
+        );
+        formData.append(
+          `variants[${index}][referralPrice]`,
+          parseInt(priceWithReferralDiscount)
+        );
+        formData.append(`variants[${index}][mlmDiscount]`,parseInt(data.mlmDiscount));
+        formData.append(
+          `variants[${index}][normalDiscount]`,
+          parseInt(data?.normalDiscount)
+        );
+        formData.append(
+          `variants[${index}][referralDiscount]`,
+          parseInt(data?.referralDiscount)
+        );
+      });
+    }
 
+    Array.from(data.photo).forEach((file) => {
+      formData.append("productImage", file);
+    });
+    
+
+    // Logging the form data for debugging
+    for (let [key, value] of formData.entries()) {
+      console.log(`${key}:`, value);
+    }
+
+    // Making the API call
     mutate(
       { formData, productCode: data.productCode },
       {
@@ -86,6 +119,41 @@ export default function CrackersDataUpload() {
       }
     );
   };
+
+  // const onSubmit = (data) => {
+  //   const formData = new FormData();
+
+  //   const fields = {
+  //     productCode: data.productCode,
+  //     productCategory: data.productCategory,
+  //     productName: data.productName,
+  //     category: "Crackers",
+  //     gst: data.gst,
+  //     quantity: data.quantity,
+  //     unit: data.unit,
+  //     pieces: data.pieces,
+  //     price: data.price,
+  //     mlmDiscount: data.mlmDiscount,
+  //     referralDiscount: data.referralDiscount,
+  //     normalDiscount: data.normalDiscount,
+  //     mlmPrice: parseInt(priceWithMLMDiscount),
+  //     referralPrice: parseInt(priceWithReferralDiscount),
+  //     normalPrice: parseInt(priceWithNormalDiscount),
+  //   };
+
+  //   Object.entries(fields).forEach(([key, value]) => {
+  //     formData.append(key, value);
+  //   });
+
+  //   formData.append("productImage", data.productCode);
+
+  //   mutate(
+  //     { formData, productCode: data._id },
+  //     {
+  //       onSuccess: () => reset(),
+  //     }
+  //   );
+  // };
 
   return (
     <div className="container bg-white mx-auto p-4 min-h-full">
@@ -146,14 +214,14 @@ export default function CrackersDataUpload() {
                 type="text"
                 className="flex-1 px-4 py-2 border-none focus:outline-none"
                 placeholder="Enter quantity"
-                {...register("quantity", {
+                {...register(`varients.${[0]}.value`, {
                   required: "Quantity is required",
                   valueAsNumber: true,
                 })}
               />
               <select
                 className="h-full bg-gray-100 px-4 py-2 focus:outline-none border-none"
-                {...register("unit", {
+                {...register(`varients.${[0]}.unit`, {
                   required: "Unit is required",
                 })}
               >
@@ -162,20 +230,22 @@ export default function CrackersDataUpload() {
               </select>
             </div>
 
-            {errors.quantity && (
-              <p className="text-red-500 text-sm">{errors.quantity.message}</p>
+            {errors.varients?.[0]?.value && (
+              <p className="text-red-500 text-sm">
+                {errors.varients?.[0]?.value.message}
+              </p>
             )}
           </div>
 
           <InputField
             label="Pieces"
-            name="pieces"
+            name={`varients.${[0]}.pieces`}
             placeholder="Enter pieces"
-            register={register("pieces", {
+            register={register(`varients.${[0]}.pieces`, {
               required: "pieces is required",
               valueAsNumber: true,
             })}
-            error={errors.pieces}
+            error={errors.varients?.[0]?.pieces}
           />
 
           <InputField

@@ -1,18 +1,14 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import Heading from "../../Headings/Headings";
-import TablePlaceholder from "../../loaders/TableSkelton";
 import { ordersDash } from "../../../constatnts/TableHeadings";
 import { useFetchOrders } from "../../../hooks/useOrder";
+import LoadingBox from "../../Loaders/LoadingBox";
 
-export default function OrdersTable() {
+export default function OrdersTable({ category }) {
   const navigate = useNavigate();
 
-  const category = "Snacks";
-
   const { data, isLoading } = useFetchOrders(category);
-
-  console.log(data);
 
   return (
     <div className="bg-white p-6 rounded-lg shadow-md border border-primary">
@@ -26,7 +22,7 @@ export default function OrdersTable() {
         </button>
       </div>
       {isLoading ? (
-        <TablePlaceholder />
+        <LoadingBox width="w-full" height="h-64" rounded="rounded-md" />
       ) : (
         <div className="overflow-x-auto min-h-80">
           <table className="min-w-full border-collapse block md:table">
@@ -53,8 +49,8 @@ export default function OrdersTable() {
                   <td className="p-2 block md:table-cell truncate">
                     {data.shippingAddress?.phoneNumber}
                   </td>
-                  {data.items?.map((itm) => (
-                    <td className="p-2 block md:table-cell truncate">
+                  {data.items?.map((itm,ind) => (
+                    <td className="p-2 block md:table-cell truncate" key={ind}>
                       {itm?.product?.productType}
                     </td>
                   ))}

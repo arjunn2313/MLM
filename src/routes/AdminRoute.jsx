@@ -45,6 +45,7 @@ import CrackersDataUpload from "../pages/ecommerce/Crackers/Upload/CrackersDataU
 import CrackersUpdateStock from "../pages/ecommerce/Crackers/Stock/CrackersUpdateStock";
 import SnacksUpdateStock from "../pages/ecommerce/Snacks/Stock/SnacksUpdateStock";
 import Reports from "../pages/admin/Reports/Reports";
+import SnacksUpdate from "../pages/ecommerce/Snacks/Upload/SnacksUpdate";
 
 const AdminRoute = [
   {
@@ -141,7 +142,7 @@ const AdminRoute = [
       { path: "list", element: <SnacksList /> },
       { path: "list/add", element: <SnacksDataUpload /> },
       { path: "list/preview/:id", element: <SnacksPreview /> },
-      // { path: "list/edit/:id", element: <SnacksUpdateProductForm /> },
+      { path: "list/update/:id", element: <SnacksUpdate /> },
       { path: "stock", element: <SnacksStock /> },
       { path: "stock/new", element: <SnacksNewStock /> },
       { path: "stock/edit/:id", element: <SnacksUpdateStock /> },

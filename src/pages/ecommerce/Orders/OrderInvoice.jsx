@@ -28,7 +28,7 @@ export default function OrderInvoice() {
   });
 
   return (
-    <>
+    <div className="container  ">
       <div className="flex items-center gap-5 mb-4">
         <BackButton path={-1} />
         <Heading text="Orders" />
@@ -128,14 +128,16 @@ export default function OrderInvoice() {
                 <tr>
                   <td className="border-b px-4 py-2">{ind + 1}</td>
                   <td className="border-b px-4 py-2">
-                    {itm.product.productCategory}
+                    {itm.productId.productName}
                   </td>
                   <td className="border-b px-4 py-2">
-                    {itm.product.productCode}
+                    {itm.productId.productCode}
                   </td>
-                  <td className="border-b px-4 py-2">{itm.product.category}</td>
                   <td className="border-b px-4 py-2">
-                    {itm.product.productName}
+                    {itm.productId.category}
+                  </td>
+                  <td className="border-b px-4 py-2">
+                    {itm.productId.productName}
                   </td>
                   <td className="border-b px-4 py-2">{itm.quantity}</td>
                   <td className="border-b px-4 py-2">250 gms</td>
@@ -163,6 +165,6 @@ export default function OrderInvoice() {
           </button>
         </div> */}
       </div>
-    </>
+    </div>
   );
 }

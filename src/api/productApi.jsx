@@ -77,22 +77,27 @@ export const postProductStock = async ({ id, ...data }) => {
 
 // FETCH PRODUCT DASHBOARD
 export const fetchProductDashboard = async () => {
-  const response = await api.get(`/api/admin/product-dashboard/snacks-categories`);
+  const response = await api.get(
+    `/api/admin/product-dashboard/snacks-categories`
+  );
   return response.data;
 };
 
 // FETCH SALES REPORT
-export const fetchSalesReport = async ({category,interval}) =>{
-  const response = await api.get(`/api/admin/product-dashboard/total-sales`,{
-    params : {category,interval}
+export const fetchSalesReport = async ({ category, interval }) => {
+  const response = await api.get(`/api/admin/product-dashboard/total-sales`, {
+    params: { category, interval },
   });
-  return response.data
-}
+  return response.data;
+};
 
 // FETCH SUB CATEGORY SALES REPORT
-export const fetchCategorySalesReport = async ({category,interval}) =>{
-  const response = await api.get(`api/admin/product-dashboard/total-subcategory-sales`,{
-    params : {category,interval}
-  });
-  return response.data
-}
+export const fetchCategorySalesReport = async ({ category, interval }) => {
+  const response = await api.get(
+    `api/admin/product-dashboard/total-subcategory-sales`,
+    {
+      params: { category, interval },
+    }
+  );
+  return response.data;
+};

@@ -16,8 +16,8 @@ export default function OrderDetails() {
   const navigate = useNavigate()
  
   const handlePrint = useReactToPrint({
-    content: () => invoiceRef.current, // Ensure content is set correctly
-    documentTitle: `Invoice-${data?.orderId}`, // Optional title for the document
+    content: () => invoiceRef.current,  
+    documentTitle: `Invoice-${data?.orderId}`, 
     onBeforePrint: () => {
       if (!invoiceRef.current) {
         console.error("No content to print. Make sure the ref is attached correctly.");
@@ -31,6 +31,9 @@ export default function OrderDetails() {
       console.error("invoiceRef is not set correctly.");
     }
   }, [invoiceRef]);
+
+  console.log(data);
+  
 
   if (isLoading) return <Spinner />;
   return (
@@ -99,16 +102,16 @@ export default function OrderDetails() {
                       {index + 1}
                     </td>
                     <td className="p-2 block md:table-cell">
-                      {data.product.productCategory}
+                      {data.productId?.productName}
                     </td>
                     <td className="p-2 block md:table-cell truncate">
-                      {data.product.productCode}
+                      {data.productId?.productCode}
                     </td>
                     <td className="p-2 block md:table-cell truncate">
-                      {data.product.category}{" "}
+                      {data.productId?.category}{" "}
                     </td>
                     <td className="p-2 block md:table-cell truncate">
-                      {data.product.productName}
+                      {data.productId?.productName}
                     </td>
                     <td className="p-2 block md:table-cell truncate">
                       {data.quantity}

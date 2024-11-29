@@ -36,7 +36,19 @@ export default function CrackersNewStock() {
     setAddNewCategory(true);
   };
 
+  // const onSubmit = (data) => {
+  //   mutate(
+  //     { data, category },
+  //     {
+  //       onSuccess: () => reset(),
+  //     }
+  //   );
+  // };
+
+
   const onSubmit = (data) => {
+    data.category =  category
+    data.variantType = "quantity"
     mutate(
       { data, category },
       {

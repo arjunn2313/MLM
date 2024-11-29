@@ -31,6 +31,9 @@ export default function SnacksStock() {
     setCurrentPage(page);
   };
 
+  console.log(data);
+  
+
   return (
     <React.Fragment>
       <div className="container bg-white mx-auto p-4 ">
@@ -93,7 +96,7 @@ export default function SnacksStock() {
                       {data?.productName}
                     </td>
                     <td className="p-2 py-4 block md:table-cell">
-                      {data?.totalQuantity}
+                      {data?.varient?.totalQuantity} {" "} {data?.varient?.totalQuantityUnit}
                     </td>
                     <td className="p-2 py-4 block md:table-cell">
                       {" "}

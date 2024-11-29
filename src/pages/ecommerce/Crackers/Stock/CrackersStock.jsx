@@ -26,6 +26,8 @@ export default function CrackersStock() {
   );
   const totalPages = data?.totalPages || 1;
 
+  console.log(data);
+
   const handleCategoryChange = (category) => {
     setCategory(category);
   };
@@ -99,11 +101,15 @@ export default function CrackersStock() {
                     </td>
 
                     <td className="p-2 py-4 block md:table-cell">
-                      {data?.totalQuantity} {data?.totalQuantityUnit}
+                      {data?.varient?.totalQuantity}{" "}
+                      {data?.varient?.totalQuantityUnit}
                     </td>
-                    <td className="p-2 py-4 block md:table-cell">
-                      {data?.quantity} {data?.unit}
-                    </td>
+                    {data.varient?.variants?.map((data,ind) => (
+                      <td className="p-2 py-4 block md:table-cell" key={ind}>
+                        {data?.value} {data?.unit}
+                      </td>
+                    ))}
+
                     <td className="p-2 py-4 block md:table-cell">
                       {" "}
                       {moment(new Date(data?.updatedAt)).format("DD-MM-YYYY")}

@@ -121,27 +121,32 @@ export default function CrackersList() {
                     <td className="p-2 py-4 block md:table-cell">
                       {data?.productName}
                     </td>
-                    <td className="p-2 py-4 block md:table-cell">
-                      {data?.quantity}
-                    </td>
-                    <td className="p-2 py-4 block md:table-cell">
-                      {data?.pieces}
-                    </td>{" "}
-                    <td className="p-2 py-4 block md:table-cell">
-                      {data?.price} Rs
-                    </td>{" "}
-                    <td className="p-2 py-4 block md:table-cell">
-                      {data?.gst} %
-                    </td>{" "}
-                    <td className="p-2 py-4 block md:table-cell">
-                      {data?.mlmDiscount}%
-                    </td>{" "}
-                    <td className="p-2 py-4 block md:table-cell">
-                      {data?.referralDiscount}%
-                    </td>
-                    <td className="p-2 py-4 block md:table-cell">
-                      {data?.normalDiscount}%
-                    </td>
+                    {data?.varient?.variants?.map((itm,indx) => (
+                      <React.Fragment key={indx}>
+                        <td className="p-2 py-4 block md:table-cell">
+                          {itm?.value} {itm?.unit}
+                        </td>
+                        <td className="p-2 py-4 block md:table-cell">
+                          {itm?.pieces}
+                        </td>{" "}
+                        <td className="p-2 py-4 block md:table-cell">
+                          {itm?.price} Rs
+                        </td>{" "}
+                        <td className="p-2 py-4 block md:table-cell">
+                          {data?.gst} %
+                        </td>{" "}
+                        <td className="p-2 py-4 block md:table-cell">
+                          {itm?.mlmDiscount}%
+                        </td>{" "}
+                        <td className="p-2 py-4 block md:table-cell">
+                          {itm?.referralDiscount}%
+                        </td>
+                        <td className="p-2 py-4 block md:table-cell">
+                          {itm?.normalDiscount}%
+                        </td>
+                      </React.Fragment>
+                    ))}
+
                     <td className="p-2 block md:table-cell">
                       <span
                         className={`px-2 py-1 rounded-full ${

@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import InputField from "../../../components/Form/InputField";
 import { useForm } from "react-hook-form";
 import SaveButton from "../../../components/Button/saveButton";
@@ -86,12 +86,12 @@ const AdminLogin = () => {
         <div className="mt-6 text-center">
           <p className="text-sm text-gray-500">
             Don't have an account?{" "}
-            <a
-              href="/signUp"
+            <Link
+              to="/signUp"
               className="text-blue-400 hover:underline transition-colors duration-200"
             >
               Sign Up
-            </a>
+            </Link>
           </p>
         </div>
       </div>

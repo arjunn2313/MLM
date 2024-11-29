@@ -14,7 +14,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Pagination from "../../../../components/Pagination/Pagination";
 
 export default function SnacksList() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [category, setCategory] = useState("All");
   const [status, setStatus] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
@@ -41,6 +41,7 @@ export default function SnacksList() {
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
+  console.log(data);
 
   return (
     <React.Fragment>
@@ -97,7 +98,13 @@ export default function SnacksList() {
 
               <tbody className="block md:table-row-group capitalize">
                 {data?.products?.map((data, index) => (
-                  <tr key={index} className="border-t block md:table-row cursor-pointer" onClick={()=>navigate(`/snacks/list/preview/${data?._id}`)}>
+                  <tr
+                    key={index}
+                    className="border-t block md:table-row cursor-pointer"
+                    onClick={() =>
+                      navigate(`/snacks/list/preview/${data?._id}`)
+                    }
+                  >
                     <td className="p-2 py-4 block md:table-cell">
                       {(currentPage - 1) * 10 + index + 1}
                     </td>
@@ -114,7 +121,7 @@ export default function SnacksList() {
                       {data?.productName}
                     </td>
                     <td className="p-2 py-4 block md:table-cell">
-                      {data?.weight.map((itm, idx) => (
+                      {data?.varient?.variants?.map((itm, idx) => (
                         <div key={idx}>
                           {itm.value} {itm.unit}
                         </div>
@@ -122,7 +129,7 @@ export default function SnacksList() {
                     </td>
 
                     <td className="p-2 py-4 block md:table-cell">
-                      {data?.weight.map((itm, idx) => (
+                      {data?.varient?.variants?.map((itm, idx) => (
                         <div key={idx}>{itm.price} Rs</div>
                       ))}
                     </td>

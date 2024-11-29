@@ -20,7 +20,7 @@ export default function HeadsList() {
     currentPage,
     selectedDistrict
   );
-  console.log(data);
+ 
   const { data: filter, error } = useFilter(selectedDistrict);
 
   const totalPages = data?.totalPages || 1;

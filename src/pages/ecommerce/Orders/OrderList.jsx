@@ -14,16 +14,19 @@ export default function OrderList() {
   const selectedTab = searchParams.get("tab") || "Snacks";
   const [currentPage, setCurrentPage] = useState(1);
   const navigate = useNavigate();
-  const orderStatus = "Completed";
+  const orderStatus = "Confirmed";
   const [date, setDate] = useState();
   const [searchQuery, setSearchQuery] = useState("");
   const { data, isLoading } = useFetchOrders(
+    selectedTab,
     currentPage,
     searchQuery,
     orderStatus,
     date,
-    selectedTab
+    
   );
+
+ 
 
   const handleTabChange = (tab) => {
     setSearchParams({ tab });
@@ -99,7 +102,7 @@ export default function OrderList() {
               <tbody className="block md:table-row-group capitalize">
                 {data?.orders?.map((data, index) => (
                   <tr
-                    key={index}
+                    key={data?._id}
                     className="border-t block md:table-row cursor-pointer"
                     onClick={() => navigate(`details/${data._id}`)}
                   >
@@ -118,12 +121,12 @@ export default function OrderList() {
                     <td className="p-2 block md:table-cell truncate">
                       {data.shippingAddress?.phoneNumber}
                     </td>
-                    {data?.items.map((itm) => (
-                      <>
+                    {data?.items.map((itm,ind) => (
+                      <React.Fragment key={ind}>
                         <td className="p-2 block md:table-cell truncate">
                           {itm.quantity}
                         </td>
-                      </>
+                      </React.Fragment>
                     ))}
                     <td className="p-2 block md:table-cell truncate">
                       {data.totalAmount}
@@ -139,7 +142,7 @@ export default function OrderList() {
                             : "  text-yellow-500"
                         }`}
                       >
-                        {data.status}
+                        {data.orderStatus}
                       </span>
                     </td>
                   </tr>

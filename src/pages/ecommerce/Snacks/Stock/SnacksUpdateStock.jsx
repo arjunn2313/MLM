@@ -25,14 +25,14 @@ export default function SnacksUpdateStock() {
   const { data, isLoading } = useProductDetails(id);
   const { data: options } = useProductCategory(category);
   const [addNewCategory, setAddNewCategory] = useState(false);
-  const {mutate,isPending} = useUpdateProductStock()
+  const { mutate, isPending } = useUpdateProductStock();
 
   useEffect(() => {
     if (!isLoading && data) {
       setValue("productCode", data.productCode);
       setValue("productCategory", data.productCategory);
       setValue("productName", data.productName);
-      setValue("totalQuantity", data.totalQuantity);
+      setValue("totalQuantity", data.varient.totalQuantity);
     }
   }, [isLoading, data, setValue]);
 
@@ -43,13 +43,23 @@ export default function SnacksUpdateStock() {
 
   if (isLoading) return <Spinner />;
 
+  // const onSubmit = (data) => {
+  //   mutate({
+  //     id,
+  //     productCode: data.productCode,
+  //     productCategory: data.productCategory,
+  //     productName: data.productName,
+  //     totalQuantity: data.totalQuantity,
+  //   });
+  // };
+
   const onSubmit = (data) => {
     mutate({
-      id,  
-      productCode: data.productCode,
-      productCategory: data.productCategory,
-      productName: data.productName,
-      totalQuantity: data.totalQuantity,
+      id,
+      productCode: data.productCode?.trim(),
+      productCategory: data.productCategory?.trim(),
+      productName: data.productName?.trim(),
+      totalQuantity: parseFloat(data.totalQuantity) || 0,
     });
   };
 

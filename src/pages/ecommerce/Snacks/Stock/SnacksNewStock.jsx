@@ -36,7 +36,19 @@ export default function SnacksNewStock() {
     setAddNewCategory(true);
   };
 
+  // const onSubmit = (data) => {
+  //   mutate(
+  //     { data, category },
+  //     {
+  //       onSuccess: () => reset(),
+  //     }
+  //   );
+  // };
+
   const onSubmit = (data) => {
+    data.category = category;
+    data.variantType = "weight";
+    data.totalQuantityUnit = "kg"
     mutate(
       { data, category },
       {
@@ -44,6 +56,7 @@ export default function SnacksNewStock() {
       }
     );
   };
+
   return (
     <div className="container bg-white mx-auto p-4 h-full">
       <Heading text="New Product" color="default" />

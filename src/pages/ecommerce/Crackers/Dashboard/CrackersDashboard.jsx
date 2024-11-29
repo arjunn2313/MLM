@@ -11,7 +11,7 @@ import LowStock from "../../../../components/Product/Dashboard/LowStock";
 
 export default function CrackersDashboard() {
   const { data, isLoading } = useProductDashboard();
-  console.log(data);
+ 
 
   return (
     <>
@@ -35,16 +35,16 @@ export default function CrackersDashboard() {
 
       <div className="grid grid-cols-8 gap-3    mt-5">
         <div className="col-span-4">
-          <SalesChart />
+          <SalesChart category="Crackers"/>
         </div>
         <div className="col-span-4">
-          <DonutChart />
+          <DonutChart category="Crackers"/>
         </div>
       </div>
 
       <div className="grid grid-cols-8 gap-3    mt-5">
         <div className="col-span-5">
-          <OrdersTable />
+          <OrdersTable category="Crackers"/>
         </div>
         <div className="col-span-3">
           <LowStock />

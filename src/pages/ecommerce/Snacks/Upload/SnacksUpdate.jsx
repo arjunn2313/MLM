@@ -5,11 +5,12 @@ import InputField from "../../../../components/Form/InputField";
 import SaveButton from "../../../../components/Button/saveButton";
 import FileUploadField from "../../../../components/Form/FileUpload";
 import {
-  useCheckProduct,
+  useProductDetails,
   useUpdateProductInstance,
 } from "../../../../hooks/useProduct";
+import { useParams } from "react-router-dom";
 
-export default function SnacksDataUpload() {
+export default function SnacksUpdate() {
   const {
     register,
     handleSubmit,
@@ -24,14 +25,13 @@ export default function SnacksDataUpload() {
     control,
     name: "weights",
   });
-
+  const { id } = useParams();
   const weights = watch("weights");
   const mlmDiscount = watch("mlmDiscount");
   const referralDiscount = watch("referralDiscount");
   const normalDiscount = watch("normalDiscount");
-  const productCode = watch("productCode");
 
-  const { data, isLoading, error: productError } = useCheckProduct(productCode);
+  const { data, isLoading, error: productError } = useProductDetails(id);
   const { mutate, isPending } = useUpdateProductInstance();
 
   useEffect(() => {
@@ -40,71 +40,81 @@ export default function SnacksDataUpload() {
     }
   }, [append, fields.length]);
 
+ 
+
   useEffect(() => {
     if (data) {
+      setValue("productCode", data?.productCode);
       setValue("productCategory", data?.productCategory);
       setValue("productName", data?.productName);
+      setValue("gst", data?.gst);
+      setValue("mlmDiscount", data?.varient?.variants[0]?.mlmDiscount);
+      setValue(
+        "referralDiscount",
+        data?.varient?.variants[0]?.referralDiscount
+      );
+      setValue("normalDiscount", data?.varient?.variants[0]?.normalDiscount);
     }
-  }, [data, setValue]);
+  }, [data, setValue, reset, append]);
 
   const onSubmit = (data) => {
-    try {
-      const formData = new FormData();
-      const fields = ["productCode", "productCategory", "productName", "gst"];
-      fields.forEach((field) => formData.append(field, data[field]));
+    // try {
+    //   const formData = new FormData();
+    //   const fields = ["productCode", "productCategory", "productName", "gst"];
+    //   fields.forEach((field) => formData.append(field, data[field]));
 
-      formData.append("category", "Snacks");
+    //   formData.append("category", "Snacks");
 
-      data.weights.forEach(({ weight, unit, price }, index) => {
-        formData.append(`variants[${index}][value]`, weight);
-        formData.append(`variants[${index}][unit]`, unit);
-        formData.append(`variants[${index}][price]`, price);
-        formData.append(
-          `variants[${index}][mlmPrice]`,
-          parseInt(discountDetails[index].mlmDiscountedPrice)
-        );
-        formData.append(
-          `variants[${index}][normalPrice]`,
-          parseInt(discountDetails[index].normalDiscountedPrice)
-        );
-        formData.append(
-          `variants[${index}][referralPrice]`,
-          parseInt(discountDetails[index].referralDiscountedPrice)
-        );
-        formData.append(
-          `variants[${index}][mlmDiscount]`,
-          parseInt(data.mlmDiscount)
-        );
-        formData.append(
-          `variants[${index}][normalDiscount]`,
-          parseInt(data?.normalDiscount)
-        );
-        formData.append(
-          `variants[${index}][referralDiscount]`,
-          parseInt(data?.referralDiscount)
-        );
-      });
-      console.log(data);
+    //   data.weights.forEach(({ weight, unit, price }, index) => {
+    //     formData.append(`variants[${index}][value]`, weight);
+    //     formData.append(`variants[${index}][unit]`, unit);
+    //     formData.append(`variants[${index}][price]`, price);
+    //     formData.append(
+    //       `variants[${index}][mlmPrice]`,
+    //       parseInt(discountDetails[index].mlmDiscountedPrice)
+    //     );
+    //     formData.append(
+    //       `variants[${index}][normalPrice]`,
+    //       parseInt(discountDetails[index].normalDiscountedPrice)
+    //     );
+    //     formData.append(
+    //       `variants[${index}][referralPrice]`,
+    //       parseInt(discountDetails[index].referralDiscountedPrice)
+    //     );
+    //     formData.append(
+    //       `variants[${index}][mlmDiscount]`,
+    //       parseInt(data.mlmDiscount)
+    //     );
+    //     formData.append(
+    //       `variants[${index}][normalDiscount]`,
+    //       parseInt(data?.normalDiscount)
+    //     );
+    //     formData.append(
+    //       `variants[${index}][referralDiscount]`,
+    //       parseInt(data?.referralDiscount)
+    //     );
+    //   });
+    //   console.log(data);
 
-      if (data.photo) {
-        Array.from(data.photo).forEach((file) =>
-          formData.append("productImage", file)
-        );
-      }
+    //   if (data.photo) {
+    //     Array.from(data.photo).forEach((file) =>
+    //       formData.append("productImage", file)
+    //     );
+    //   }
 
-      // for (let [key, value] of formData.entries()) {
-      //   console.log(`${key}:`, value);
-      // }
+    //   // for (let [key, value] of formData.entries()) {
+    //   //   console.log(`${key}:`, value);
+    //   // }
 
-      mutate(
-        { formData, productCode },
-        {
-          onSuccess: () => reset(),
-        }
-      );
-    } catch (error) {
-      console.log(error);
-    }
+    //   mutate(
+    //     { formData, productCode },
+    //     {
+    //       onSuccess: () => reset(),
+    //     }
+    //   );
+    // } catch (error) {
+    //   console.log(error);
+    // }
   };
 
   const discountDetails = weights?.map((wp) => {
@@ -293,12 +303,12 @@ export default function SnacksDataUpload() {
               )}
 
               {/* <button
-                type="button"
-                className="bg-red-500 text-white px-4 py-2 rounded-md"
-                onClick={() => remove(index)}
-              >
-                Remove
-              </button> */}
+                    type="button"
+                    className="bg-red-500 text-white px-4 py-2 rounded-md"
+                    onClick={() => remove(index)}
+                  >
+                    Remove
+                  </button> */}
             </div>
           ))}
         </div>

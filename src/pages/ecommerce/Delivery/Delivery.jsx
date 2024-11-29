@@ -14,15 +14,15 @@ export default function Delivery() {
   const [searchParams, setSearchParams] = useSearchParams();
   const selectedTab = searchParams.get("tab") || "Snacks";
   const [currentPage, setCurrentPage] = useState(1);
-  const orderStatus = "Completed";
+  const orderStatus = "Confirmed";
   const date = null;
   const [searchQuery, setSearchQuery] = useState("");
   const { data, isLoading } = useFetchOrders(
+    selectedTab,
     currentPage,
     searchQuery,
     orderStatus,
-    date,
-    selectedTab
+    date
   );
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedData, setSelectedData] = useState();

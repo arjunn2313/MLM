@@ -13,6 +13,9 @@ export default {
         "custom-orange" : "rgba(170, 91, 23, 1)",
         "custom-pink" :"rgba(255, 114, 114, 1)",
       },
+      fontFamily: {
+        poppins: ['Poppins', 'sans-serif'],  
+      },
     },
   },
   plugins: [],
