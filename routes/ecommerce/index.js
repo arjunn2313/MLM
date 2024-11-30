@@ -9,9 +9,11 @@ const { authenticateToken } = require("../../utils/jwt");
 
 router.use("/user",UserRoute);
 router.use('/product',ProductRoute)
+// AUth
 router.use('/cart',authenticateToken,CartRoute)
 router.use('/wishlist',authenticateToken,WishlistRoute)
 router.use('/order',authenticateToken,orderRoute)
+
 router.use('/buynow',buyNowRoute)
 
 module.exports = router;

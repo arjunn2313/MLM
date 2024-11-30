@@ -15,6 +15,7 @@ router.post("/login-by-otp", UserController.validateAndLogin);
 router.post("/resend-login-otp", UserController.resendLoginOtp);
 // FORGOT PASSWORD AND RESET
 router.post("/forget-password", UserController.forgotPassword);
+router.post("/verify-forget-otp", UserController.verifyforgotOtp);
 router.post("/reset-password", UserController.resetPassword);
 // GET USER INFORMATION
 router.get("/details",authenticateToken,UserController.getUserDetails);

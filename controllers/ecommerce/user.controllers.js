@@ -147,7 +147,7 @@ exports.checkPhoneNumberVerification = async (req, res, next) => {
   try {
     const { phoneNumber } = req.body;
 
-    const user = await User.findOne({ phoneNumber, isVerified : true });
+    const user = await User.findOne({ phoneNumber, isVerified: true });
 
     if (!user) {
       return res
@@ -157,7 +157,7 @@ exports.checkPhoneNumberVerification = async (req, res, next) => {
 
     res.status(STATUS_CODES.SUCCESS).json({
       message: "Verified",
-       phoneNumber,
+      phoneNumber,
     });
   } catch (error) {
     next(error);
@@ -296,8 +296,29 @@ exports.forgotPassword = async (req, res, next) => {
     next(error);
   }
 };
+// VERIFY OTP
+exports.verifyforgotOtp = async (req, res, next) => {
+  try {
+    const { phoneNumber, otp } = req.body;
 
-// VALIDATE OTP AND RESET PASSWORD
+    const user = await User.findOne({
+      phoneNumber,
+      otp,
+      otpExpires: { $gt: Date.now() },
+    });
+
+    if (!user) {
+      return next(createError(STATUS_CODES.NOT_FOUND, MESSAGES.OTP.INVALID));
+    }
+
+    res.status(STATUS_CODES.SUCCESS).json({ message: MESSAGES.OTP.VERIFIED });
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+};
+
+// RESET PASSWORD
 exports.resetPassword = async (req, res, next) => {
   try {
     const { phoneNumber, otp, newPassword } = req.body;
@@ -317,7 +338,7 @@ exports.resetPassword = async (req, res, next) => {
     user.password = hashedPassword;
     await user.save();
 
-    res.status(STATUS_CODES.SUCCESS).json({ message: MESSAGES.OTP.VERIFIED });
+    res.status(STATUS_CODES.SUCCESS).json({ message: MESSAGES.PASSWORD.RESET_SUCCESS });
   } catch (error) {
     console.error(error);
     next(error);

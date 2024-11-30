@@ -1,4 +1,5 @@
 const Order = require("../../models/Order");
+const Product = require("../../models/Product");
 const Review = require("../../models/Review");
 
 // GET ALL
@@ -139,7 +140,9 @@ const getAllProductReview = async (req, res) => {
   try {
     const reviews = await Review.find()
       .populate("userId", "name")
-      .populate("productId", "category");
+      .populate("productId", "category")
+      .sort({ createdAt: -1 });
+      
 
     if (reviews.length === 0) {
       return res
@@ -175,6 +178,27 @@ const approveOrRejectReview = async (req, res) => {
 
     if (!updatedReview) {
       return res.status(404).json({ error: "Review not found" });
+    }
+
+    if (status === "approved" || status === "rejected") {
+      const productId = updatedReview.productId;
+
+      const approvedReviews = await Review.find({
+        productId,
+        status: "approved",
+      });
+
+      const reviewCount = approvedReviews.length;
+      const totalRating = approvedReviews.reduce(
+        (sum, review) => sum + review.rating,
+        0
+      );
+      const averageRating = reviewCount > 0 ? totalRating / reviewCount : 0;
+
+      await Product.findByIdAndUpdate(productId, {
+        reviewCount,
+        averageRating,
+      });
     }
 
     res.json(updatedReview);
