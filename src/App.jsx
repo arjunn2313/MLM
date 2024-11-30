@@ -11,12 +11,14 @@ import NotFound from "./components/Warnings/NotFound";
 import AdminLogin from "./pages/admin/Auth/AdminLogin";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 import PublicRoute from "./components/ProtectedRoute/PublicRoutes";
-import SignIn from "./pages/user/signIn";
-import SignUp from "./pages/user/SignUp";
+import UserLayout from "./layouts/User/Layout";
+import SignUp from "./pages/user/Auth/SignUp";
+import SignIn from "./pages/user/Auth/SignIn";
+import AgentRoute from "./routes/UserRoute";
+import { GetRoleFromToken } from "./utils/CheckRole";
+
+
  
-
-export const BaseUrl = import.meta.env.VITE_API_BASE_URL;
-
 const router = createHashRouter([
   // ADMIN ROUTE
   {
@@ -39,9 +41,23 @@ const router = createHashRouter([
       <PublicRoute
         element={<AdminLogin />}
         redirectPath="/"
-        isAuthenticated={!!localStorage.getItem("accessToken")}
+        // isAuthenticated={!!localStorage.getItem("accessToken")}
       />
     ),
+  },
+  {
+    path: "/user",
+    element: (
+      <UserLayout>
+        <Outlet />
+      </UserLayout>
+    ),
+    children: [
+      {
+        element: <ProtectedRoute allowedRoles={["agent"]} />,
+        children: AgentRoute,
+      },
+    ],
   },
   {
     path: "/signIn",

@@ -1,12 +1,21 @@
 import { BiLockAlt } from "react-icons/bi";
 import { FaClipboardList } from "react-icons/fa";
-import { GiFireworkRocket, GiLevelEndFlag } from "react-icons/gi";
+import {
+  GiChainLightning,
+  GiFireworkRocket,
+  GiLevelEndFlag,
+  GiMoneyStack,
+} from "react-icons/gi";
 import { GoCodeReview } from "react-icons/go";
 import { GrMoney } from "react-icons/gr";
 import { ImTree } from "react-icons/im";
 import { IoIosCheckboxOutline } from "react-icons/io";
 import { IoPeopleOutline } from "react-icons/io5";
-import { MdOutlineDashboard, MdOutlineShoppingCart } from "react-icons/md";
+import {
+  MdOutlineDashboard,
+  MdOutlineShoppingCart,
+  MdShoppingCartCheckout,
+} from "react-icons/md";
 import { PiCookieThin, PiUsersThreeBold } from "react-icons/pi";
 import {
   TbBinaryTree,
@@ -49,7 +58,7 @@ const Management = [
   },
   {
     label: "Crackers",
-    icon: GiFireworkRocket ,
+    icon: GiFireworkRocket,
     path: "/crackers",
     submenu: [
       { label: "Dashboard", path: "/crackers/dashboard" },
@@ -59,8 +68,19 @@ const Management = [
   },
   { label: "Orders", icon: IoIosCheckboxOutline, path: "/orders" },
   { label: "Delivery Tracking", icon: TbTruckDelivery, path: "/delivery" },
-  { label: "Expense", icon: GrMoney , path: "/expense" },
+  { label: "Expense", icon: GrMoney, path: "/expense" },
   { label: "Reviews & Ratings", icon: GoCodeReview, path: "/reviews" },
 ];
 
 export default Management;
+
+export const Agent = [
+  { label: "Dashboard", icon: MdOutlineDashboard, path: "/user/dashboard" },
+  { label: "My Tree", icon: GiChainLightning, path: "/user/my-tree" },
+  {
+    label: "Purchase History",
+    icon: MdShoppingCartCheckout,
+    path: "/user/purchase-history",
+  },
+  { label: "Earnings History", icon: GiMoneyStack, path: "/user/earnings-history" },
+];

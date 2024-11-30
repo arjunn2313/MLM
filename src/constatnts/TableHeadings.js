@@ -194,3 +194,8 @@ export const ordersDash = [
 
 // low stock
 export const lowStock = ["Code", "Product", "Quantity"];
+
+
+// earning history
+
+export const userearningHistory = ["Sl. no.","Received Date","Earnings Type","Amount"]

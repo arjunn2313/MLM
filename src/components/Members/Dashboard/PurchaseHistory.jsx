@@ -3,8 +3,8 @@ import Heading from "../../Headings/Headings";
 
 const PurchaseHistory = () => {
   return (
-    <div className="p-4 bg-white rounded-xl border-2 border-blue-400">
-      <Heading text="Purchase History"/>
+    <div className="p-4 bg-white rounded-xl border-2 h-full border-blue-400">
+      <Heading text="Purchase History" />
       <table className="min-w-full border-collapse block md:table mt-4">
         <thead className="block md:table-header-group">
           <tr className="block md:table-row">

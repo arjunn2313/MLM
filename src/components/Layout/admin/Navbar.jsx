@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 const Navbar = () => {
   const [isRotated, setIsRotated] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const handleArrowClick = () => {
     setIsRotated(!isRotated);
@@ -50,10 +50,10 @@ const Navbar = () => {
               </button>
               <button
                 className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
-                onClick={() =>{
-                   localStorage.removeItem("accessToken")
-                   window.location.reload();
-                  }}
+                onClick={() => {
+                  localStorage.removeItem("accessToken");
+                  window.location.reload();
+                }}
               >
                 Logout
               </button>
@@ -66,11 +66,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-
-{
-  /* <img
-           src="https://via.placeholder.com/40"
-           alt="User Avatar"
-           className="w-10 h-10 rounded-full ml-4"
-         /> */
-}

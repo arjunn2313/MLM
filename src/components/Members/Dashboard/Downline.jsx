@@ -6,11 +6,11 @@ import Heading from "../../Headings/Headings";
 const DownlineMembers = ({ members }) => {
   const navigate = useNavigate();
   return (
-    <div className="p-4 h-full bg-white shadow rounded-xl border-2 border-blue-400 overflow-hidden">
+    <div className="p-4 h-full  bg-white shadow rounded-xl border-2 border-blue-400  ">
       <Heading text="Downline Members" />
 
       <div className="  overflow-y-auto mt-3">
-        {members?.children?.map((member, index) => (
+        {members?.map((member, index) => (
           <div
             key={index}
             className="flex items-center space-x-4  py-2 border-b"

@@ -9,7 +9,12 @@ import "./NodeTree.css";
 import Popover from "../PopOver/PopOver";
 import { useNavigate } from "react-router-dom";
 
-export default function NodeTree({ treeData, isLoading, refetch}) {
+export default function NodeTree({
+  treeData,
+  isLoading,
+  refetch,
+  sponsor = false,
+}) {
   const [zoom, setZoom] = useState(1);
   const treeContainer = useRef(null);
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
@@ -219,23 +224,46 @@ export default function NodeTree({ treeData, isLoading, refetch}) {
           />
         </div>
       </div>
+      {sponsor && (
+        <div className="flex justify-center items-center">
+          <div className=" flex flex-col justify-center items-center gap-5  mx-auto">
+            <div>
+              <img
+                src={`${import.meta.env.VITE_API_BASE_URL}/${
+                  treeData?.photoUrl
+                }`}
+                alt="agent"
+                className="border rounded-full p-3 w-16 h-16 border-[#54C000] bg-[#53c00037]"
+              />
+            </div>
+            <div className="text-center">
+              <span className="p-2 px-10 bg-[#54C000] rounded-full text-white ">
+                {treeData?.sponsorId}
+              </span>
 
-      {treeData && (
-        <Tree
-          ref={treeContainer}
-          data={treeData}
-          orientation="vertical"
-          pathFunc={pathFunc}
-          translate={{ x: window.innerWidth / 2, y: 50 }}
-          separation={{ siblings: 1, nonSiblings: 2 }}
-          renderCustomNodeElement={renderNode}
-          zoom={zoom}
-          zoomable={true}
-          collapsible={false}
-          initialDepth={undefined}
-          pathClassFunc={() => "tree-link"}
-        />
+              <p className="mt-5 text-[#54C000]"> My Sponsor</p>
+            </div>
+          </div>
+        </div>
       )}
+      <div className="w-full h-full flex flex-col justify-center items-center">
+        {treeData && (
+          <Tree
+            ref={treeContainer}
+            data={treeData}
+            orientation="vertical"
+            pathFunc={pathFunc}
+            translate={{ x: window.innerWidth / 2, y: 50 }}
+            separation={{ siblings: 1, nonSiblings: 2 }}
+            renderCustomNodeElement={renderNode}
+            zoom={zoom}
+            zoomable={true}
+            collapsible={false}
+            initialDepth={undefined}
+            pathClassFunc={() => "tree-link"}
+          />
+        )}
+      </div>
     </div>
   );
 }

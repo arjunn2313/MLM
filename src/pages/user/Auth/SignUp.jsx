@@ -1,10 +1,10 @@
 import React from "react";
-import SignUpImg from "../../assets/Singup.svg";
-import CreateAccount from "../../components/LoginAccount/CreateAccount";
-import OtpForm from "../../components/LoginAccount/OtpForm";
+import SignUpImg from "../../../assets/Singup.svg";
+import CreateAccount from "../../../components/LoginAccount/CreateAccount";
+import OtpForm from "../../../components/LoginAccount/OtpForm";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { data } from "autoprefixer";
-import { useUserAccount, useUserOtValidate } from "../../hooks/useAuth";
+import { useUserAccount, useUserOtValidate } from "../../../hooks/useAuth";
 
 const SignUp = () => {
   const { mutate, isPending } = useUserAccount();

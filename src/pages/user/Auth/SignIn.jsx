@@ -1,11 +1,11 @@
 import React from "react";
-import SignUpImg from "../../assets/Singup.svg";
-import UserLogin from "../../components/LoginAccount/UserLogin";
-import { useUserLogin, useUserLoginByOtpValidate } from "../../hooks/useAuth";
+import SignUpImg from "../../../assets/Singup.svg";
+import UserLogin from "../../../components/LoginAccount/UserLogin";
+import { useUserLogin, useUserLoginByOtpValidate } from "../../../hooks/useAuth";
 import { useSearchParams } from "react-router-dom";
-import OtpForm from "../../components/LoginAccount/OtpForm";
-import PasswordForm from "../../components/LoginAccount/PasswordForm";
-import PasswordAssistance from "../../components/LoginAccount/PasswordAssistance";
+import OtpForm from "../../../components/LoginAccount/OtpForm";
+import PasswordForm from "../../../components/LoginAccount/PasswordForm";
+import PasswordAssistance from "../../../components/LoginAccount/PasswordAssistance";
 
 export default function SignIn() {
   const { mutate, isPending } = useUserLogin();
