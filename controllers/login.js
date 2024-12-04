@@ -168,7 +168,7 @@ const loginReqByPass = async (req, res) => {
   try {
     const { phoneNumber, password } = req.body;
 
-    const user = await UserAccount.findOne({ phoneNumber, isVerified: true });
+    const user = await UserAccount.findOne({ phoneNumber, isVerified: true }).populate("registrationId");
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });

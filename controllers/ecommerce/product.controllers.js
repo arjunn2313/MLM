@@ -140,7 +140,7 @@ exports.getSingleProduct = async (req, res) => {
 
     const product = await Product.findById(id).populate({
       path: "varient",
-      select: `variantType variants.value variants.unit variants.price ${
+      select: `variantType variants.sku variants.value variants.unit variants.price ${
         user?.isMlmAgent ? "variants.mlmPrice" : "variants.normalPrice"
       }`,
     });

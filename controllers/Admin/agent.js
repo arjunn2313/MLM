@@ -16,6 +16,7 @@ const {
 const Agent = require("../../models/agents");
 const Section = require("../../models/section");
 const District = require("../../models/district");
+const settings = require("../../models/settings");
 
 //create
 
@@ -1092,9 +1093,6 @@ const downlineMembers = async (req, res) => {
   try {
     const { memberId } = req.params;
 
- 
-    
-
     // Find the agent by memberId and populate the children
     const agent = await Agent.findOne({ memberId })
       .populate({
@@ -1110,6 +1108,21 @@ const downlineMembers = async (req, res) => {
     res.status(200).json(agent);
   } catch (error) {
     console.error("Error fetching downline members:", error);
+    res.status(500).json({ message: "An error occurred while fetching data." });
+  }
+};
+
+const getJoiningFee = async (req, res) => {
+  try {
+    const settingss = await settings.findOne();
+
+    console.log(settingss);
+
+    res
+      .status(200)
+      .json({ message: "success", joiningFee: settingss?.joiningFee });
+  } catch (error) {
+    console.error("Error fetching settings:", error);
     res.status(500).json({ message: "An error occurred while fetching data." });
   }
 };
@@ -1134,5 +1147,6 @@ module.exports = {
   AllIncompleteMember,
   treeMemberFilter,
   AllCompleteMember,
-  downlineMembers
+  downlineMembers,
+  getJoiningFee,
 };

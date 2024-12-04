@@ -5,7 +5,13 @@ const User = require("../models/User");
 
 const generateAccessToken = (user) => {
   return jwt.sign(
-    { userId: user._id, role: user.role },
+    {
+      userId: user._id,
+      role: user.role,
+      photoUrl: user.registrationId?.applicantPhoto,
+      memberId: user.registrationId?.memberId,
+      name: user.fullName,
+    },
     process.env.JWT_SECRET,
     {
       expiresIn: "8h",
@@ -61,7 +67,7 @@ const isMlmAgentMiddleware = async (req, res, next) => {
     req.isMlmAgent = user.isMlmAgent;
     next();
   } catch (error) {
-     next()
+    next();
   }
 };
 
@@ -69,5 +75,5 @@ module.exports = {
   generateAccessToken,
   authenticateToken,
   checkRole,
-  isMlmAgentMiddleware
+  isMlmAgentMiddleware,
 };

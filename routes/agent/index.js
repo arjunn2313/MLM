@@ -5,7 +5,7 @@ const earningRoute = require("./ExpenseHistory")
 const treeRoute = require("./Tree")
  
 
-router.use("/agent", UserRoute);
+router.use("/", UserRoute);
 router.use("/dashboard",dashboardRoute);
 router.use("/earning",earningRoute);
 router.use("/tree", treeRoute);
