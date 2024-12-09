@@ -5,6 +5,8 @@ const router = require("express").Router();
 
 // CREATE (ADD TO CART)
 router.post("/add",cart.addToCart);
+// ADD mANY
+router.post("/add-many",cart.addManyToCart);
 // GET CART ITEMS
 router.get("/get-items",cart.getAllCartItems);
 // UPDATE (Quantity from cart)

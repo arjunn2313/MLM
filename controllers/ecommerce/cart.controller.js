@@ -309,3 +309,88 @@ exports.checkoutCart = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+
+exports.addManyToCart = async (req, res, next) => {
+  const { products } = req.body; // Expecting an array of products with productId, variantSku, quantity, and variantId
+  const { userId } = req.user;
+
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      return next(createError(STATUS_CODES.NOT_FOUND, MESSAGES.USER.NOT_FOUND));
+    }
+
+    const isMlmUser = user.isMlmAgent;
+
+    let cart = await Cart.findOne({ userId, status: "active" });
+
+    if (!cart) {
+      cart = new Cart({ userId, items: [], totalAmount: 0 });
+    }
+
+    for (const productData of products) {
+      const { productId, variantSku, quantity, variantId } = productData;
+
+      const product = await Product.findById(productId);
+      if (!product) {
+        return next(
+          createError(STATUS_CODES.NOT_FOUND, `Product with ID ${productId} not found`)
+        );
+      }
+
+      const variant = await Variant.findOne({
+        productId,
+        "variants.sku": variantSku,
+      });
+
+      if (!variant) {
+        return next(
+          createError(STATUS_CODES.NOT_FOUND, `Variant with SKU ${variantSku} not found`)
+        );
+      }
+
+      const selectedVariant = variant.variants.find(
+        (v) => v.sku === variantSku
+      );
+
+      const price = isMlmUser
+        ? selectedVariant.mlmPrice
+        : selectedVariant.normalPrice;
+      const totalPrice = price * quantity;
+
+      const existingItemIndex = cart.items.findIndex(
+        (item) =>
+          item.productId.toString() === productId &&
+          item.variantSku === variantSku
+      );
+
+      if (existingItemIndex >= 0) {
+        cart.items[existingItemIndex].quantity += quantity;
+        cart.items[existingItemIndex].totalPrice =
+          cart.items[existingItemIndex].quantity * price;
+      } else {
+        cart.items.push({
+          productId,
+          variantSku,
+          quantity,
+          price,
+          totalPrice,
+          variantId,
+        });
+      }
+    }
+
+    cart.totalAmount = cart.items.reduce(
+      (total, item) => total + item.totalPrice,
+      0
+    );
+
+    await cart.save();
+    res
+      .status(STATUS_CODES.SUCCESS)
+      .json({ message: "Items added to cart", cart });
+  } catch (err) {
+    next(err);
+  }
+};
+
