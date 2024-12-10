@@ -7,7 +7,7 @@ import SaveButton from "../../../components/Button/saveButton";
 import { FaEnvelope, FaLock, FaUserShield } from "react-icons/fa"; // Icons for email and password fields
 import { BsFillPersonFill } from "react-icons/bs"; // Icon for admin
 import { useAdminLogin } from "../../../hooks/useAuth";
-import Spinner from "../../../components/loaders/Spinner";
+ 
 
 const AdminLogin = () => {
   const {
