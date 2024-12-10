@@ -3,13 +3,18 @@ import { NavLink } from "react-router-dom";
 import {
   MdOutlineKeyboardArrowDown,
   MdOutlineKeyboardArrowUp,
+  MdOutlineLogout,
 } from "react-icons/md";
 
 const Sidebar = ({ items }) => {
   const [openSubmenu, setOpenSubmenu] = useState(null);
-
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const handleSubmenuToggle = (index) => {
     setOpenSubmenu(openSubmenu === index ? null : index);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
   };
 
   return (
@@ -20,7 +25,7 @@ const Sidebar = ({ items }) => {
         </div>
       </div>
       <div className="overflow-hidden hover:overflow-y-auto scrollbar-hide pt-2">
-        <ul className="text-[19px] p-5 flex flex-col gap-5">
+        <ul className="text-[19px] p-5 flex    flex-col gap-5">
           {items.map((item, index) => (
             <li key={index} className="mb-4">
               <NavLink
@@ -35,50 +40,46 @@ const Sidebar = ({ items }) => {
               >
                 {item.icon && <item.icon className="mr-2" />}
                 <span>{item.label}</span>{" "}
-                {item.submenu && (
-                  <MdOutlineKeyboardArrowDown
-                    onClick={() => handleSubmenuToggle(index)}
-                    className={`ml-auto transform transition-transform duration-300 ${
-                      openSubmenu === index ? "rotate-180" : ""
-                    }`}
-                  />
-                )}
               </NavLink>
-              {item.subHeading && (
-                <div className="flex items-center text-orange-800 font-bold border-b-2 border-orange-800">
-                  {item.subicon && <item.subicon className="mr-2" />}
-                  <span>{item.subHeading}</span>
-                </div>
-              )}
-              {item.submenu && openSubmenu === index && (
-                <div className="ml-2 mt-2 flex flex-col space-y-3 text-[15px] relative">
-                  <div className="absolute top-8 left-[13px] w-[2px] h-24 bg-gray-300"></div>
-                  {item.submenu.map((subItem, subIndex) => (
-                    <div
-                      key={subIndex}
-                      className="relative flex items-center group cursor-pointer"
-                    >
-                      <div className="absolute w-2 h-2 bg-[#345261] rounded-full left-[10px] group-hover:bg-[#345261]"></div>
-                      <NavLink
-                        to={subItem.path}
-                        className={({ isActive }) =>
-                          `flex items-center py-2 pl-8 text-gray-700 transition-colors rounded-md duration-300 ${
-                            isActive
-                              ? "text-[#345261] font-medium"
-                              : "hover:bg-[#f0f0f0] hover:text-[#345261]"
-                          }`
-                        }
-                      >
-                        <span>{subItem.label}</span>
-                      </NavLink>
-                    </div>
-                  ))}
-                </div>
-              )}
             </li>
           ))}
+          <li
+            onClick={() => setIsModalOpen(!isModalOpen)}
+            className="mb-4 flex items-center text-gray-700 transition-colors rounded-md duration-300 hover:bg-[#f0f0f0] hover:text-[#345261] cursor-pointer "
+          >
+            <span className="mr-2">
+              <MdOutlineLogout />
+            </span>{" "}
+            Log Out
+          </li>
         </ul>
       </div>
+
+      {isModalOpen && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-1/4">
+            <h3 className="text-lg font-semibold mb-4">Logout Confirmation</h3>
+            <p>Are you sure you want to log out?</p>
+            <div className="mt-6 flex justify-end space-x-4">
+              <button
+                className="bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400"
+                onClick={handleCloseModal}
+              >
+                Cancel
+              </button>
+              <button
+                className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+                onClick={() => {
+                  localStorage.removeItem("accessToken");
+                  window.location.reload();
+                }}
+              >
+                Logout
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

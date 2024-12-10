@@ -13,6 +13,7 @@ import referal from "../../../assets/referal.svg";
 import earnings from "../../../assets/earnings.svg";
 import wallet from "../../../assets/wallet.svg";
 import BackButton from "../../../components/Button/BackButton";
+import { data } from "autoprefixer";
 
 export default function MemberDashView() {
    const {memberId} = useParams() 
@@ -35,6 +36,8 @@ export default function MemberDashView() {
       </div>
     );
   }
+ 
+  
 
   return (
     <>
@@ -52,7 +55,7 @@ export default function MemberDashView() {
           <PurchaseHistory />
         </div>
         <div className="lg:col-span-2">
-          <DownlineMembers members={member} />
+          <DownlineMembers members={member?.children} />
         </div>
       </div>
 

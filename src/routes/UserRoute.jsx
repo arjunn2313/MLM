@@ -4,6 +4,7 @@ import MyTree from "../pages/user/MyTree/MyTree";
 import EarningHistory from "../pages/user/EarningHistory/EarningHistory";
 import PurchaseHistory from "../pages/user/PurchaseHistory/PurchaseHistory";
 import RegisterForm from "../pages/user/Register/RegisterForm";
+import UserRegTerms from "../pages/user/Register/UserRegTerms";
 
 const AgentRoute = [
   {
@@ -26,7 +27,16 @@ const AgentRoute = [
   },
   {
     path: "register",
-    element: <RegisterForm />,
+    children: [
+      {
+        index: true,
+        element: <RegisterForm />,
+      },
+      {
+        path: "terms-and-condition",
+        element: <UserRegTerms />,
+      },
+    ],
   },
 ];
 

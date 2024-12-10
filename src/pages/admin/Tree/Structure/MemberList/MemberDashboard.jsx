@@ -51,7 +51,7 @@ export default function MemberDashboard() {
           <PurchaseHistory />
         </div>
         <div className="lg:col-span-2">
-          <DownlineMembers members={member} />
+          <DownlineMembers members={member?.children} />
         </div>
       </div>
 

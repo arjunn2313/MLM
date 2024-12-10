@@ -1,3 +1,4 @@
+import { jwtDecode } from "jwt-decode";
 import { useState } from "react";
 import { FaUserShield } from "react-icons/fa";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
@@ -7,6 +8,7 @@ const Navbar = () => {
   const [isRotated, setIsRotated] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
+
 
   const handleArrowClick = () => {
     setIsRotated(!isRotated);

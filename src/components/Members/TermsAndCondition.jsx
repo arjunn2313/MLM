@@ -53,7 +53,7 @@ export default function TermsAndCondition() {
   ];
 
   return (
-    <div className="p-3">
+    <div className="p-3 container mx-auto" >
       <div className="text-center my-3">
         <Heading text="Terms & Conditions" color="default" />
       </div>

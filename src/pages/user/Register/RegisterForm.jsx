@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import Heading from "../../../components/Headings/Headings";
 import InputField from "../../../components/Form/InputField";
@@ -6,6 +6,14 @@ import SelectGroup from "../../../components/Form/SelectGroup";
 import { PhoneNumber } from "../../../components/Form/PhoneNumber";
 import FileUploadField from "../../../components/Form/FileUpload";
 import SaveButton from "../../../components/Button/saveButton";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import {
+  useUserJoiningfee,
+  useUserPhoneNumber,
+  useUserPlacement,
+  useUserSponsor,
+} from "../../../hooks/useUser";
+import { fileToBase64 } from "../../../utils/fileUtils";
 
 export default function RegisterForm() {
   const {
@@ -16,8 +24,66 @@ export default function RegisterForm() {
     watch,
     reset,
   } = useForm();
+  const navigate = useNavigate()
+  const [searchParams] = useSearchParams();
+  const sponsorIdRef = searchParams.get("sponsorId");
+  const phoneNumber = watch("phoneNumber");
+  const sponsorId = watch("sponsorId");
+  const placementId = watch("placementId");
 
-  const onSubmit = () => {};
+  const {
+    data: phoneExists,
+    isLoading: phoneLoading,
+    isSuccess,
+    error: phoneError,
+  } = useUserPhoneNumber(phoneNumber);
+
+  const {
+    data: placementData,
+    isLoading: placementLoading,
+    error: placementError,
+  } = useUserPlacement(placementId);
+
+  const {
+    data: sponsorData,
+    isLoading: sponsorLoading,
+    error: sponsorError,
+  } = useUserSponsor(sponsorId);
+
+  const { data: joiningFeeData, isLoading: joiningFeeLoading } =
+    useUserJoiningfee();
+
+  useEffect(() => {
+    if (joiningFeeData && joiningFeeData.joiningFee) {
+      setValue("joiningFee", joiningFeeData.joiningFee);
+    }
+
+    if (sponsorIdRef) {
+      setValue("placementId", sponsorIdRef);
+      setValue("sponsorId", sponsorIdRef);
+    }
+
+    if (placementData && placementData.nextPlacement) {
+      setValue("applicantPlacementLevel", placementData.nextPlacement);
+    } else if (!placementData) {
+      setValue("applicantPlacementLevel", "");
+    }
+  }, [joiningFeeData, placementData, setValue]);
+
+  const onSubmit = async (data) => {
+    const applicantPhotoBase64 = await fileToBase64(data.applicantPhoto[0]);
+    const plainObject = {
+      ...data,
+      sponsorName: sponsorData?.name,
+      sponsorPlacementLevel: sponsorData?.applicantPlacementLevel,
+      placementName: placementData?.name,
+      placementPlacementLevel: placementData?.applicantPlacementLevel,
+      applicantPhoto: applicantPhotoBase64,
+    };
+    localStorage.setItem("formData", JSON.stringify(plainObject));
+    navigate("terms-and-condition");
+  };
+
   return (
     <div className="container bg-white mx-auto p-4">
       <Heading text="Registration Form" color="default" />
@@ -53,9 +119,9 @@ export default function RegisterForm() {
             label="Phone Number"
             defaultCountry="IN"
             placeholder="Enter phone number"
-            // isSuccess={isSuccess}
-            // isError={phoneError}
-            // isLoading={phoneLoading}
+            isSuccess={isSuccess}
+            isError={phoneError}
+            isLoading={phoneLoading}
             value={watch("phoneNumber")}
             onChange={(value) => setValue("phoneNumber", value)}
             error={errors.phoneNumber}
@@ -274,9 +340,10 @@ export default function RegisterForm() {
           <InputField
             label="Sponsor ID"
             placeholder="Enter sponsor ID"
-            // isError={sponsorError}
-            // isLoading={sponsorLoading}
+            isError={sponsorError}
+            isLoading={sponsorLoading}
             name="sponsorId"
+            disabled={true}
             onChange={(value) => setValue("sponsorId", value)}
             value={watch("sponsorId")}
             register={register("sponsorId", {
@@ -285,7 +352,7 @@ export default function RegisterForm() {
             error={errors.sponsorId}
           />
 
-          {/* <div className="flex items-center  justify-around  ">
+          <div className="flex items-center  justify-around  ">
             <span>
               Sponsor Name :{" "}
               <span className="text-blue-500 font-medium">
@@ -298,15 +365,15 @@ export default function RegisterForm() {
                 {sponsorData?.applicantPlacementLevel}
               </span>
             </span>
-          </div> */}
+          </div>
 
           <InputField
             label="Placement ID"
             placeholder="Enter Placement ID"
             name="placementId"
-            // disabled={sponsorIdRef}
-            // isError={placementError}
-            // isLoading={placementLoading}
+            disabled={sponsorIdRef}
+            isError={placementError}
+            isLoading={placementLoading}
             onChange={(value) => setValue("placementId", value)}
             value={watch("placementId")}
             register={register("placementId", {
@@ -315,7 +382,7 @@ export default function RegisterForm() {
             error={errors.placementId}
           />
 
-          {/* <div className="flex items-center  justify-around  ">
+          <div className="flex items-center  justify-around  ">
             <span>
               Placement Member Name :{" "}
               <span className="text-blue-500 font-medium">
@@ -328,7 +395,7 @@ export default function RegisterForm() {
                 {placementData?.applicantPlacementLevel}
               </span>
             </span>
-          </div> */}
+          </div>
 
           <InputField
             label="Applicant Placement Level"
@@ -369,7 +436,7 @@ export default function RegisterForm() {
 
           <SaveButton
             type="submit"
-            // loading={joiningFeeLoading}
+            loading={joiningFeeLoading}
             text="Next"
             loadingText="Saving..."
           />
