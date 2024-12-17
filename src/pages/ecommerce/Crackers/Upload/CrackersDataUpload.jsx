@@ -26,7 +26,13 @@ export default function CrackersDataUpload() {
     return (price - (price * discount) / 100).toFixed(2);
   };
 
-  const { mlmDiscount, referralDiscount, normalDiscount, price } = watch();
+  const {
+    mlmDiscount,
+    referralDiscount,
+    normalDiscount,
+    referralIdDiscount,
+    price,
+  } = watch();
 
   if (price === undefined || price === null || isNaN(price) || price <= 0) {
     console.error("Price is not valid:", price);
@@ -36,6 +42,10 @@ export default function CrackersDataUpload() {
   const priceWithReferralDiscount = calculateDiscountedPrice(
     price,
     referralDiscount
+  );
+  const priceWithReferralIdDiscount = calculateDiscountedPrice(
+    price,
+    referralIdDiscount
   );
   const priceWithNormalDiscount = calculateDiscountedPrice(
     price,
@@ -62,7 +72,6 @@ export default function CrackersDataUpload() {
       productName: data.productName,
       category: "Crackers",
       gst: data.gst,
- 
     };
 
     // Append basic product fields to formData
@@ -89,7 +98,14 @@ export default function CrackersDataUpload() {
           `variants[${index}][referralPrice]`,
           parseInt(priceWithReferralDiscount)
         );
-        formData.append(`variants[${index}][mlmDiscount]`,parseInt(data.mlmDiscount));
+        formData.append(
+          `variants[${index}][referralIdPrice]`,
+          parseInt(priceWithReferralIdDiscount)
+        );
+        formData.append(
+          `variants[${index}][mlmDiscount]`,
+          parseInt(data.mlmDiscount)
+        );
         formData.append(
           `variants[${index}][normalDiscount]`,
           parseInt(data?.normalDiscount)
@@ -98,13 +114,16 @@ export default function CrackersDataUpload() {
           `variants[${index}][referralDiscount]`,
           parseInt(data?.referralDiscount)
         );
+        formData.append(
+          `variants[${index}][referralIdDiscount]`,
+          parseInt(data?.referralIdDiscount)
+        );
       });
     }
 
     Array.from(data.photo).forEach((file) => {
       formData.append("productImage", file);
     });
-    
 
     // Logging the form data for debugging
     for (let [key, value] of formData.entries()) {
@@ -271,15 +290,27 @@ export default function CrackersDataUpload() {
           />
 
           <InputField
-            label="Referral Discount"
-            name="referralDiscount"
+            label="Referral ID Discount"
+            name="referralIdDiscount"
             placeholder="Enter referral discount"
+            register={register("referralIdDiscount", {
+              required: "referal discount is required",
+              valueAsNumber: true,
+            })}
+            error={errors.referralIdDiscount}
+          />
+
+          <InputField
+            label="Normal Customer Discount"
+            name="referralDiscount"
+            placeholder="Enter normal customer discount"
             register={register("referralDiscount", {
               required: "referal discount is required",
               valueAsNumber: true,
             })}
             error={errors.referralDiscount}
           />
+
           <InputField
             label="Normal Discount"
             name="normalDiscount"
@@ -309,9 +340,20 @@ export default function CrackersDataUpload() {
               {priceWithMLMDiscount} Rs
             </span>
           </div>
+
           <div className="flex items-center gap-3">
             <label className="block text-sm font-medium    mr-2">
-              Price After Refferal Discount
+              Referral ID Discount
+            </label>
+
+            <span className="text-green-500 font-semibold">
+              {priceWithReferralIdDiscount} Rs
+            </span>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <label className="block text-sm font-medium    mr-2">
+              Normal Customer Discount
             </label>
 
             <span className="text-green-500 font-semibold">

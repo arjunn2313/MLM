@@ -25,13 +25,17 @@ export default function Delivery() {
     date
   );
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedItem, setSelectedItem] = useState();
   const [selectedData, setSelectedData] = useState();
   const { mutate, isPending } = useOrderDispatch();
 
-  const handleOpenModal = (data) => {
+  const handleOpenModal = (data, item) => {
     setIsModalOpen(true);
     setSelectedData(data);
+    setSelectedItem(item);
   };
+
+  console.log(selectedItem);
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
@@ -43,13 +47,28 @@ export default function Delivery() {
 
   const totalPages = data?.totalPages || 1;
 
-  const onSubmit = (data) => {
-    mutate(
-      { id: selectedData._id, data },
-      {
-        onSuccess: () => handleCloseModal(),
-      }
-    );
+  // const onSubmit = (data) => {
+  //   mutate(
+  //     { id: selectedData._id, data },
+  //     {
+  //       onSuccess: () => handleCloseModal(),
+  //     }
+  //   );
+  // };
+
+  const onSubmit = (formData) => {
+    const payload = {
+      id: selectedData._id,
+      orderId: selectedData?.orderId,
+      productId: selectedItem?.productId?._id,
+
+      trackingId: formData.trackingId,
+      trackingLink: formData.trackingLink,
+      deliveryPartner: formData.deliveryPartner,
+    };
+    mutate(payload, {
+      onSuccess: () => handleCloseModal(),
+    });
   };
 
   return (
@@ -131,10 +150,12 @@ export default function Delivery() {
                     <td className="p-2 block md:table-cell truncate">
                       {data.items?.length}
                     </td>
-                    <td className="p-2 block md:table-cell truncate">
-                      {data.totalAmount}
+                    <td className="p-2  md:table-cell truncate ">
+                      {data.items?.map((data, indx) => (
+                        <div key={indx}>{data?.productId?.productName}</div>
+                      ))}
                     </td>
-                    <td className="p-2 block md:table-cell">
+                    {/* <td className="p-2 block md:table-cell">
                       {data.trackingId || (
                         <button
                           className="text-blue-500 underline"
@@ -143,6 +164,22 @@ export default function Delivery() {
                           Enter Tracking Id
                         </button>
                       )}
+                    </td> */}
+                    <td className="p-2 md:table-cell truncate">
+                      {data.items?.map((itm, indx) => (
+                        <div key={indx}>
+                          {itm.trackingId ? (
+                            <span>{itm.trackingId}</span>
+                          ) : (
+                            <button
+                              className="text-blue-500 underline"
+                              onClick={() => handleOpenModal(data, itm)}
+                            >
+                              Enter Tracking ID
+                            </button>
+                          )}
+                        </div>
+                      ))}
                     </td>
                   </tr>
                 ))}

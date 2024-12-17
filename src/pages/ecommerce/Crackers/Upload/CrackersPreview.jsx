@@ -25,7 +25,7 @@ export default function CrackersPreview() {
   }, [data]);
 
   const handleImageUpload = () => {}
-  if(isLoading) return <Spinner/>
+   
 
   return (
     <div className="container mx-auto bg-white p-4">

@@ -121,15 +121,17 @@ export default function OrderList() {
                     <td className="p-2 block md:table-cell truncate">
                       {data.shippingAddress?.phoneNumber}
                     </td>
+                    <td className="p-2 block md:table-cell truncate">
                     {data?.items.map((itm,ind) => (
                       <React.Fragment key={ind}>
-                        <td className="p-2 block md:table-cell truncate">
+                        <div >
                           {itm.quantity}
-                        </td>
+                        </div>
                       </React.Fragment>
                     ))}
+                    </td>
                     <td className="p-2 block md:table-cell truncate">
-                      {data.totalAmount}
+                      {data?.totalAmount}
                     </td>
 
                     <td className="p-2 block md:table-cell truncate">

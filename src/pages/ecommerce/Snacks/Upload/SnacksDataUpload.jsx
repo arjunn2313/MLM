@@ -28,6 +28,7 @@ export default function SnacksDataUpload() {
   const weights = watch("weights");
   const mlmDiscount = watch("mlmDiscount");
   const referralDiscount = watch("referralDiscount");
+  const referralIdDiscount = watch("referralIdDiscount");
   const normalDiscount = watch("normalDiscount");
   const productCode = watch("productCode");
 
@@ -72,6 +73,10 @@ export default function SnacksDataUpload() {
           parseInt(discountDetails[index].referralDiscountedPrice)
         );
         formData.append(
+          `variants[${index}][referralIdPrice]`,
+          parseInt(discountDetails[index].referralIdDiscountedPrice)
+        );
+        formData.append(
           `variants[${index}][mlmDiscount]`,
           parseInt(data.mlmDiscount)
         );
@@ -83,8 +88,11 @@ export default function SnacksDataUpload() {
           `variants[${index}][referralDiscount]`,
           parseInt(data?.referralDiscount)
         );
+        formData.append(
+          `variants[${index}][referralIdDiscount]`,
+          parseInt(data?.referralIdDiscount)
+        );
       });
-      console.log(data);
 
       if (data.photo) {
         Array.from(data.photo).forEach((file) =>
@@ -116,6 +124,8 @@ export default function SnacksDataUpload() {
       mlmDiscountAmount: (price * (parseFloat(mlmDiscount) || 0)) / 100,
       referralDiscountAmount:
         (price * (parseFloat(referralDiscount) || 0)) / 100,
+      referralIdDiscountAmount:
+        (price * (parseFloat(referralIdDiscount) || 0)) / 100,
       normalDiscountAmount: (price * (parseFloat(normalDiscount) || 0)) / 100,
       mlmDiscountedPrice: (
         price -
@@ -124,6 +134,10 @@ export default function SnacksDataUpload() {
       referralDiscountedPrice: (
         price -
         (price * (parseFloat(referralDiscount) || 0)) / 100
+      ).toFixed(2),
+      referralIdDiscountedPrice: (
+        price -
+        (price * (parseFloat(referralIdDiscount) || 0)) / 100
       ).toFixed(2),
       normalDiscountedPrice: (
         price -
@@ -195,9 +209,20 @@ export default function SnacksDataUpload() {
           />
 
           <InputField
-            label="Referral Discount"
-            name="referralDiscount"
+            label="Referral ID Discount"
+            name="referralIdDiscount"
             placeholder="Enter referral discount"
+            register={register("referralIdDiscount", {
+              required: "referal discount is required",
+              valueAsNumber: true,
+            })}
+            error={errors.referralIdDiscount}
+          />
+
+          <InputField
+            label="Normal Customer Discount"
+            name="referralDiscount"
+            placeholder="Enter normal customer discount"
             register={register("referralDiscount", {
               required: "referal discount is required",
               valueAsNumber: true,
@@ -282,7 +307,11 @@ export default function SnacksDataUpload() {
                     {discountDetails[index].mlmDiscountedPrice}
                   </p>
                   <p>
-                    Referral Discounted Price: ₹
+                    Referral ID Discount: ₹
+                    {discountDetails[index].referralIdDiscountedPrice}
+                  </p>
+                  <p>
+                    Normal Customer Discount: ₹
                     {discountDetails[index].referralDiscountedPrice}
                   </p>
                   <p>

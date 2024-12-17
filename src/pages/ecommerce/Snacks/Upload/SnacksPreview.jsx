@@ -43,7 +43,7 @@ export default function SnacksPreview() {
     // }
   };
 
-  if (isLoading) return <Spinner />;
+  
 
   const { mutate } = useUpdateProductStatus();
 
