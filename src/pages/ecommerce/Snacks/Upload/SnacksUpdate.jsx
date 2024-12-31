@@ -34,6 +34,9 @@ export default function SnacksUpdate() {
   const { data, isLoading, error: productError } = useProductDetails(id);
   const { mutate, isPending } = useUpdateProductInstance();
 
+  console.log(data);
+  
+
   useEffect(() => {
     if (fields.length === 0) {
       append({ weight: "", unit: "gms", price: "" });
@@ -58,65 +61,27 @@ export default function SnacksUpdate() {
   }, [data, setValue, reset, append]);
 
   const onSubmit = (data) => {
-    // try {
-    //   const formData = new FormData();
-    //   const fields = ["productCode", "productCategory", "productName", "gst"];
-    //   fields.forEach((field) => formData.append(field, data[field]));
-
-    //   formData.append("category", "Snacks");
-
-    //   data.weights.forEach(({ weight, unit, price }, index) => {
-    //     formData.append(`variants[${index}][value]`, weight);
-    //     formData.append(`variants[${index}][unit]`, unit);
-    //     formData.append(`variants[${index}][price]`, price);
-    //     formData.append(
-    //       `variants[${index}][mlmPrice]`,
-    //       parseInt(discountDetails[index].mlmDiscountedPrice)
-    //     );
-    //     formData.append(
-    //       `variants[${index}][normalPrice]`,
-    //       parseInt(discountDetails[index].normalDiscountedPrice)
-    //     );
-    //     formData.append(
-    //       `variants[${index}][referralPrice]`,
-    //       parseInt(discountDetails[index].referralDiscountedPrice)
-    //     );
-    //     formData.append(
-    //       `variants[${index}][mlmDiscount]`,
-    //       parseInt(data.mlmDiscount)
-    //     );
-    //     formData.append(
-    //       `variants[${index}][normalDiscount]`,
-    //       parseInt(data?.normalDiscount)
-    //     );
-    //     formData.append(
-    //       `variants[${index}][referralDiscount]`,
-    //       parseInt(data?.referralDiscount)
-    //     );
-    //   });
-    //   console.log(data);
-
-    //   if (data.photo) {
-    //     Array.from(data.photo).forEach((file) =>
-    //       formData.append("productImage", file)
-    //     );
-    //   }
-
-    //   // for (let [key, value] of formData.entries()) {
-    //   //   console.log(`${key}:`, value);
-    //   // }
-
-    //   mutate(
-    //     { formData, productCode },
-    //     {
-    //       onSuccess: () => reset(),
-    //     }
-    //   );
-    // } catch (error) {
-    //   console.log(error);
-    // }
+    try {
+      // Construct the update object
+      const updateData = {};
+  
+      if (data.productCode) updateData.productCode = data.productCode;
+      if (data.productCategory) updateData.productCategory = data.productCategory;
+      if (data.productName) updateData.productName = data.productName;
+      if (data.gst) updateData.gst = data.gst;
+  
+      // Pass the object to the mutate function
+      mutate(
+        { updateData, productCode: data.productCode },
+        {
+          onSuccess: () => reset(), // Reset form on success
+        }
+      );
+    } catch (error) {
+      console.error("Error submitting form:", error);
+    }
   };
-
+  
   const discountDetails = weights?.map((wp) => {
     const price = parseFloat(wp.price) || 0;
     return {
@@ -144,7 +109,7 @@ export default function SnacksUpdate() {
 
   return (
     <div className="container bg-white mx-auto p-4 min-h-full">
-      <Heading text="New Product" color="default" />
+      <Heading text="Update Product" color="default" />
 
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5 bg-white mt-5 p-2">
@@ -168,7 +133,7 @@ export default function SnacksUpdate() {
               required: "product category is required",
             })}
             error={errors.productCategory}
-            disabled={true}
+          
           />
 
           <InputField
@@ -179,7 +144,7 @@ export default function SnacksUpdate() {
               required: "product Name is required",
             })}
             error={errors.productName}
-            disabled={true}
+            
           />
 
           <InputField
@@ -193,7 +158,7 @@ export default function SnacksUpdate() {
             error={errors.gst}
           />
 
-          <InputField
+          {/* <InputField
             label="MLM Discount"
             name="mlmDiscount"
             placeholder="Enter mlm discount"
@@ -224,19 +189,19 @@ export default function SnacksUpdate() {
               valueAsNumber: true,
             })}
             error={errors.normalDiscount}
-          />
+          /> */}
 
-          <FileUploadField
+          {/* <FileUploadField
             label="Product Image"
             name="photo"
             register={register}
             error={errors.photo}
             multiple={true}
-          />
+          /> */}
         </div>
 
         {/* Dynamic fields for weight and price */}
-        <div className="mt-5 p-2 w-full">
+        {/* <div className="mt-5 p-2 w-full">
           <div className="flex justify-between">
             <label className="block text-sm font-medium text-gray-700">
               Weight & Price
@@ -302,16 +267,16 @@ export default function SnacksUpdate() {
                 </div>
               )}
 
-              {/* <button
+              <button
                     type="button"
                     className="bg-red-500 text-white px-4 py-2 rounded-md"
                     onClick={() => remove(index)}
                   >
                     Remove
-                  </button> */}
+                  </button>
             </div>
           ))}
-        </div>
+        </div> */}
 
         <div className="flex justify-end gap-5 mt-5 p-6">
           <button

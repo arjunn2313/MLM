@@ -46,14 +46,19 @@ export const fetchProductInstance = async (productCode) => {
   return response.data;
 };
 
-// UPADTE PRODUCT INSTANCE
-export const postProductData = async ({ productCode, formData }) => {
+export const postProductData = async ({ productCode, updateData }) => {
   const response = await api.put(
     `/api/admin/product/update-instance/${productCode}`,
-    formData
+    updateData, 
+    {
+      headers: {
+        "Content-Type": "application/json",  
+      },
+    }
   );
   return response.data;
 };
+
 
 // GET PRODUCT DETAILS
 export const fetchProductDetails = async (id) => {

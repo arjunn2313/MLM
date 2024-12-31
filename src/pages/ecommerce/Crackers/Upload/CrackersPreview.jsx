@@ -34,7 +34,7 @@ export default function CrackersPreview() {
         <div>
           <button
             className="text-primary hover:text-blue-700 flex items-center justify-center gap-2"
-            onClick={() => navigate(`/register/update/${id}`)}
+            onClick={() => navigate(`/crackers/list/update/${id}`)}
           >
             <CiEdit />
             Edit
