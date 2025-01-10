@@ -15,7 +15,7 @@ export default function LowStock() {
  
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md border border-primary">
+    <div className="bg-white p-6 rounded-lg shadow-md border border-primary h-full">
       <div className="flex justify-between items-center mb-4">
         <Heading text="Low Stock" />
         <button
@@ -25,7 +25,7 @@ export default function LowStock() {
           View All
         </button>
       </div>
-      {isLoading ? (
+      {/* {isLoading ? (
          <LoadingBox width="w-full" height="h-64" rounded="rounded-md" />
       ) : (
         <div className="overflow-x-auto min-h-80">
@@ -56,7 +56,7 @@ export default function LowStock() {
             </tbody>
           </table>
         </div>
-      )}
+      )} */}
     </div>
   );
 }

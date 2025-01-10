@@ -113,13 +113,15 @@ export default function OrderList() {
                       {moment(new Date(data?.createdAt)).format("DD-MM-YYYY")}
                     </td>
                     <td className="p-2 block md:table-cell truncate">
-                      {data.shippingAddress?.firstName}
+                      {data.shippingAddress?.firstName || data?.guestInfo?.name }
                     </td>
                     <td className="p-2 block md:table-cell truncate">
-                      {data.shippingAddress?.city}
+                      {data.shippingAddress?.city ||
+                      data?.guestInfo?.address?.city}
                     </td>
                     <td className="p-2 block md:table-cell truncate">
-                      {data.shippingAddress?.phoneNumber}
+                      {data.shippingAddress?.phoneNumber ||
+                      data?.guestInfo?.phone}
                     </td>
                     <td className="p-2 block md:table-cell truncate">
                     {data?.items.map((itm,ind) => (

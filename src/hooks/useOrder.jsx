@@ -7,7 +7,7 @@ import {
 import toast from "react-hot-toast";
 
 // GET --- HOOK TO FETCH ALL ORDERS
-export const useFetchOrders = (category, page, search, orderStatus, date) => {
+export const useFetchOrders = ( category, page, search, orderStatus, date) => {
   return useQuery({
     queryKey: ["orders", category, page, search, orderStatus, date],
     queryFn: () =>

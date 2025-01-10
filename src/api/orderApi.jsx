@@ -10,7 +10,7 @@ export const fetchAllOrders = async ({
   category,
 }) => {
   const response = await api.get(`/api/admin/orders`, {
-    params: { limit, page, search, orderStatus, date, category },
+    params: { limit, page, search, orderStatus, date, category ,orderStatus},
   });
   return response.data;
 };

@@ -13,14 +13,16 @@ export default function OrderDetails() {
   const { id } = useParams();
   const { data, isLoading } = useFetchOrderDetails(id);
   const invoiceRef = useRef(null);
-  const navigate = useNavigate()
- 
+  const navigate = useNavigate();
+
   const handlePrint = useReactToPrint({
-    content: () => invoiceRef.current,  
-    documentTitle: `Invoice-${data?.orderId}`, 
+    content: () => invoiceRef.current,
+    documentTitle: `Invoice-${data?.orderId}`,
     onBeforePrint: () => {
       if (!invoiceRef.current) {
-        console.error("No content to print. Make sure the ref is attached correctly.");
+        console.error(
+          "No content to print. Make sure the ref is attached correctly."
+        );
       }
     },
     onAfterPrint: () => console.log("Print job finished."),
@@ -33,11 +35,10 @@ export default function OrderDetails() {
   }, [invoiceRef]);
 
   console.log(data);
-  
 
   if (isLoading) return <Spinner />;
   return (
-    <div className="container mx-auto "  >
+    <div className="container mx-auto ">
       <div className="flex items-center gap-5 mb-3">
         <BackButton path={-1} />
         <Heading text="Orders" />
@@ -58,16 +59,16 @@ export default function OrderDetails() {
         {/* customer details */}
         <div className="grid grid-cols-2  gap-5 py-5  w-3/4" ref={invoiceRef}>
           <div className="font-semibold">Customer Name</div>
-          <div>{data?.shippingAddress?.firstName}</div>
+          <div>{data?.shippingAddress?.firstName || data?.guestInfo?.name}</div>
           <div className="font-semibold">Date of Order</div>
           <div> {moment(new Date(data?.createdAt)).format("DD-MM-YYYY")}</div>
           <div className="font-semibold">Contact Number</div>
-          <div>{data?.user?.phoneNumber}</div>
+          <div>{data?.user?.phoneNumber || data?.guestInfo?.phone}</div>
           <div className="font-semibold">Email ID</div>
-          <div>{data?.user?.email}</div>
+          <div>{data?.user?.email  || data?.guestInfo?.email}</div>
           <div className="font-semibold">Billing Address</div>
           <div>
-            {data?.shippingAddress?.address} ,{data?.shippingAddress?.city} ,{" "}
+            {data?.shippingAddress?.address || data?.guestInfo?.address?.line1} ,{data?.shippingAddress?.city} ,{" "}
             {data?.shippingAddress?.district},{data?.shippingAddress?.state},
             {data?.shippingAddress?.pincode}
           </div>

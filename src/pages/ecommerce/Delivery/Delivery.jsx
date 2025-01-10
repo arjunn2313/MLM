@@ -142,10 +142,11 @@ export default function Delivery() {
                       {data.orderId}
                     </td>
                     <td className="p-2 block md:table-cell truncate">
-                      {data.shippingAddress?.firstName}
+                      {data.shippingAddress?.firstName || data?.guestInfo?.name}
                     </td>
                     <td className="p-2 block md:table-cell truncate">
-                      {data.shippingAddress?.city}
+                      {data.shippingAddress?.city ||
+                      data?.guestInfo?.address?.city}
                     </td>
                     <td className="p-2 block md:table-cell truncate">
                       {data.items?.length}

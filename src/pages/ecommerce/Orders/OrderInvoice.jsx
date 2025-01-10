@@ -71,7 +71,8 @@ export default function OrderInvoice() {
             )}
 
             <div className="font-semibold">Contact Number</div>
-            <div>{orders?.user?.phoneNumber}</div>
+            <div>{orders?.user?.phoneNumber ||
+                      orders?.guestInfo?.phone}</div>
             <div className="font-semibold">Email ID</div>
             <div>mlmsweets@gmail.com</div>
             <div className="font-semibold">Billing Address</div>
@@ -93,16 +94,18 @@ export default function OrderInvoice() {
               {moment(new Date(orders?.createdAt)).format("DD-MM-YYYY")}
             </div>
             <div className="font-semibold">Contact Number</div>
-            <div>{orders?.user?.phoneNumber}</div>
+            <div>{orders?.user?.phoneNumber ||
+                      orders?.guestInfo?.phone}</div>
             <div className="font-semibold">Email ID</div>
-            <div>{orders?.user?.email}</div>
+            <div>{orders?.user?.email ||
+                      orders?.guestInfo?.email}</div>
             <div className="font-semibold">Billing Address</div>
             <div>
-              {orders?.shippingAddress?.address} ,
-              {orders?.shippingAddress?.city} ,{" "}
-              {orders?.shippingAddress?.district},
-              {orders?.shippingAddress?.state},
-              {orders?.shippingAddress?.pincode}
+              {orders?.shippingAddress?.address || orders?.guestInfo?.address?.line1} ,
+              {orders?.shippingAddress?.city || orders?.guestInfo?.address?.line2} ,{" "}
+              {orders?.shippingAddress?.district || orders?.guestInfo?.address?.city},
+              {orders?.shippingAddress?.state || orders?.guestInfo?.address?.state},
+              {orders?.shippingAddress?.pincode || orders?.guestInfo?.address?.postalCode}
             </div>
           </div>
         </div>

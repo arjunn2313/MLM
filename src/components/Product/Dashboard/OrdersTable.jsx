@@ -10,6 +10,8 @@ export default function OrdersTable({ category }) {
 
   const { data, isLoading } = useFetchOrders(category);
 
+  console.log(data);
+
   return (
     <div className="bg-white p-6 rounded-lg shadow-md border border-primary">
       <div className="flex justify-between items-center mb-4">
@@ -37,23 +39,25 @@ export default function OrdersTable({ category }) {
             </thead>
 
             <tbody className="block md:table-row-group capitalize truncate">
-              {data?.orders?.map((data, index) => (
+              {data?.orders?.slice(0, 5).map((data, index) => (
                 <tr key={index} className="border-t block md:table-row">
                   <td className="p-2 py-4 block md:table-cell">{index + 1}</td>
                   <td className="p-2 block md:table-cell">
-                    {data.shippingAddress?.firstName}
+                    {data.shippingAddress?.firstName || data?.guestInfo?.name}
                   </td>
                   <td className="p-2 block md:table-cell truncate">
-                    {data.shippingAddress?.district}
+                    {data.shippingAddress?.district ||
+                      data?.guestInfo?.address?.city}
                   </td>
                   <td className="p-2 block md:table-cell truncate">
-                    {data.shippingAddress?.phoneNumber}
+                    {data.shippingAddress?.phoneNumber ||
+                      data?.guestInfo?.phone}
                   </td>
-                  {data.items?.map((itm,ind) => (
-                    <td className="p-2 block md:table-cell truncate" key={ind}>
-                      {itm?.product?.productType}
-                    </td>
-                  ))}
+                  {/* {data.items?.map((itm, ind) => (
+        <tr className="p-2 flex flex-col md:table-cell truncate " key={ind}>
+          <td> {itm?.variantSku}</td>
+        </tr>
+      ))} */}
                 </tr>
               ))}
             </tbody>

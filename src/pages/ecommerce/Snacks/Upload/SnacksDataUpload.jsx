@@ -100,9 +100,9 @@ export default function SnacksDataUpload() {
         );
       }
 
-      // for (let [key, value] of formData.entries()) {
-      //   console.log(`${key}:`, value);
-      // }
+      for (let [key, value] of formData.entries()) {
+        console.log(`${key}:`, value);
+      }
 
       mutate(
         { formData, productCode },
@@ -115,6 +115,9 @@ export default function SnacksDataUpload() {
     }
   };
 
+  
+
+  
   const discountDetails = weights?.map((wp) => {
     const price = parseFloat(wp.price) || 0;
     return {
