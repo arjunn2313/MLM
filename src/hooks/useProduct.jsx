@@ -1,5 +1,6 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import {
+  deleteImage,
   fetchCategorySalesReport,
   fetchProductCategory,
   fetchProductDashboard,
@@ -11,8 +12,12 @@ import {
   postProductInstance,
   postProductStatus,
   postProductStock,
+  updateImageIndex,
+  updateProductImage,
+  uploadImage,
 } from "../api/productApi";
 import toast from "react-hot-toast";
+import api from "../api/axiosInstance";
 
 // GET --- ALL PRODUCTS
 export const useProductLists = (
@@ -149,5 +154,68 @@ export const useSubProductSales = (category,interval) => {
     queryFn: () => fetchCategorySalesReport(category,interval),
     keepPreviousData: true,
     refetchOnWindowFocus: false,
+  });
+};
+
+
+// Custom hook for updating product image
+export const useUpdateProductImage = () => {
+  return useMutation({
+    mutationFn: updateProductImage,
+    onSuccess: (data) => {
+      toast.success("Image updated successfully!");
+    },
+    onError: (error) => {
+      console.log(error);
+      
+      toast.error(
+        error?.response?.data?.message || "Failed to update the image!"
+      );
+    },
+  });
+};
+
+export const useUpdateImageIndex = () => {
+  return useMutation({
+    mutationFn: updateImageIndex,
+    onSuccess: () => {
+      toast.success("Image order updated successfully!");
+    },
+    onError: (error) => {
+      console.error("Error updating image order:", error);
+      toast.error(
+        error?.response?.data?.message || "Failed to update image order!"
+      );
+    },
+  });
+};
+
+export const useUploadImage = () => {
+  return useMutation({
+    mutationFn: uploadImage,
+    onSuccess: (data) => {
+      toast.success("Image uploaded successfully!");
+      console.log("Uploaded Image Data:", data);
+    },
+    onError: (error) => {
+      console.error("Error uploading image:", error);
+      // toast.error(
+      //   error?.response?.data?.message || "Failed to upload the image!"
+      // );
+    },
+  });
+};
+
+export const useDeleteImage = () => {
+  return useMutation({
+    mutationFn: deleteImage,
+    onSuccess: (data) => {
+      toast.success('Image deleted successfully!');
+      console.log('Deleted Image Data:', data);
+    },
+    onError: (error) => {
+      console.error('Error deleting image:', error);
+      toast.error(error?.response?.data?.message || 'Failed to delete the image!');
+    },
   });
 };

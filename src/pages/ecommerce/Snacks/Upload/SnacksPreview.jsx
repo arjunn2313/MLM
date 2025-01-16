@@ -4,13 +4,13 @@ import { CiEdit } from "react-icons/ci";
 import { useParams, useNavigate } from "react-router-dom";
 import {
   useProductDetails,
+  useUpdateProductImage,
   useUpdateProductStatus,
 } from "../../../../hooks/useProduct";
 import { LuUpload } from "react-icons/lu";
 import ProductPreviewCard from "../../../../components/Product/ProductPreviewCard";
-import toast from "react-hot-toast";
-import Spinner from "../../../../components/loaders/Spinner";
-import axios from "axios";
+
+import ImageReorder from "../../../../utils/DragAndDrop";
 
 export default function SnacksPreview() {
   const { id } = useParams();
@@ -18,68 +18,37 @@ export default function SnacksPreview() {
   const [status, setStatus] = useState(data?.status);
 
   const navigate = useNavigate();
-
-  // const handleImageUpload = async (e, index) => {
-  //   const file = e.target.files[0];
-
-  //   const validImageTypes = ["image/jpeg", "image/png", "image/gif"];
-  //   if (file && validImageTypes.includes(file.type)) {
-  //     const numericIndex = Number(index);
-
-  //     const updatedPhotos = [...formData.photos];
-  //     updatedPhotos[numericIndex] = URL.createObjectURL(file);
-  //     setFormData({ ...formData, photos: updatedPhotos });
-
-  //     const formDataToSend = new FormData();
-  //     formDataToSend.append("productImage", file);
-  //     formDataToSend.append("index", numericIndex);
-
-  //     try {
-
-  //     } catch (error) {
-  //       console.error("Error uploading image:", error);
-  //     }
-  //   } else {
-  //     toast.error("Please upload a valid image file (JPEG, PNG, GIF)");
-  //   }
-  // };
-
-  const handleImageUpload = async (e, index) => {
-    try {
-      const file = e.target.files[0];
-      if (!file) return;
-
-      const formData = new FormData();
-      formData.append("imageFile", file);
-      formData.append("index", index);
-
-      const response = await axios.put(
-        `${import.meta.env.VITE_API_BASE_URL}/api/admin/product/update-image/${data._id}`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-
-      if (response.status === 200) {
-        alert("Image updated successfully");
-
-        const updatedPhotos = [...data.photos];
-        updatedPhotos[index] = response.data.photos[index];
-        setData((prev) => ({ ...prev, photos: updatedPhotos }));
-      }
-    } catch (error) {
-      console.error("Error updating image:", error);
-      alert("Failed to update image");
-    }
-  };
-
+  const { mutate: updateImage } = useUpdateProductImage();
   const { mutate } = useUpdateProductStatus();
-
+  console.log(data);
   const handleUpdate = () => {
     mutate({ status, id });
+  };
+
+  const handleImageUpload = (e, index) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    let productId = data?._id;
+
+    updateImage(
+      { productId, file, index },
+      {
+        onSuccess: (updatedData) => {
+          const updatedPhotos = [...data.photos];
+          updatedPhotos[index] = updatedData.photos[index];
+          setData((prev) => ({ ...prev, photos: updatedPhotos }));
+        },
+      }
+    );
+  };
+
+  // IMAGE DRAG AND DROP
+  const updateImageOrder = async (newImageList) => {
+    try {
+      setImages(newImageList); // Update state with new order
+    } catch (error) {
+      console.error("Error updating image order:", error);
+    }
   };
 
   return (
@@ -96,10 +65,8 @@ export default function SnacksPreview() {
           </button>
         </div>
       </div>
-
       {/* CARD */}
       <ProductPreviewCard data={data} />
-
       {/* Status */}
       <div className="mt-5 grid grid-cols-2 w-3/4 ml-3">
         <label className="font-medium">Status</label>
@@ -135,9 +102,8 @@ export default function SnacksPreview() {
           ))}
         </div>
       </div>
-
       {/* IMAGE */}
-      <div className="mt-6 ml-3">
+      {/* <div className="mt-6 ml-3">
         <label className="font-medium">Photos</label>
         <div className="flex items-center space-x-4 mt-4">
           {data?.photos?.map((img, ind) => (
@@ -165,8 +131,10 @@ export default function SnacksPreview() {
             </div>
           ))}
         </div>
-      </div>
-
+      </div> */}
+      {data && (
+        <ImageReorder images={data?.photos} onUpdateOrder={updateImageOrder} id={data?._id} />
+      )}
       {/* Upload Button */}
       <div className="flex items-end justify-end">
         <button

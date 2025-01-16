@@ -100,3 +100,61 @@ export const fetchCategorySalesReport = async ({ category, interval }) => {
   );
   return response.data;
 };
+
+// API call to update product image
+export const updateProductImage = async ({ productId, file, index }) => {
+  const formData = new FormData();
+  formData.append("productImage", file);
+  formData.append("index", index);
+
+  const response = await api.put(
+    `/api/admin/product/update-image/${productId}`,
+    formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }
+  );
+
+  return response.data;
+};
+
+// Function to update product image order in the backend
+export const updateImageIndex = async ({
+  productId,
+  sourceIndex,
+  destinationIndex,
+}) => {
+  const response = await api.post(`/api/admin/product/update-image-index`, {
+    productId,
+    sourceIndex,
+    destinationIndex,
+  });
+  return response.data;
+};
+
+
+// upload image
+export const uploadImage = async ({ productId, file }) => {
+  const formData = new FormData();
+  formData.append("productImage", file);
+  formData.append("productId", productId);
+
+  const response = await api.post(`/api/admin/product/upload-image/${productId}`, formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+
+  return response.data;
+};
+
+//  delete image
+
+export const deleteImage = async ({ productId, imagePath }) => {
+  const response = await axios.delete(`/api/admin/product/delete-image/${productId}`, {
+    data: { imagePath },
+  });
+  return response.data;
+};
